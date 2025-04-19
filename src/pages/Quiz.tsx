@@ -33,14 +33,14 @@ const Quiz = () => {
 
     const fetchUserQuestions = async (): Promise<any[]> => {
         try {
-            const resQues = await fetch('https://xunbao.manantechnosurge.tech/api/question');
+            const resQues = await fetch('https://xunback.manantechnosurge.tech/api/question');
             const data = await resQues.json();
             const questions = data.data.questions;
             if(!user) {
                 return []
             }
 
-            const userRes = await fetch(`https://xunbao.manantechnosurge.tech/api/user/${user.id}`);
+            const userRes = await fetch(`https://xunback.manantechnosurge.tech/api/user/${user.id}`);
             const userData = await userRes.json();
             const answeredQuestionIds = userData.data.questions || [];
 
@@ -93,7 +93,7 @@ const Quiz = () => {
         }
 
         try {
-            const res = await fetch(`https://xunbao.manantechnosurge.tech/api/submit/${user.id}`, {
+            const res = await fetch(`https://xunback.manantechnosurge.tech/api/submit/${user.id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -146,7 +146,7 @@ const Quiz = () => {
     useEffect(() => {
         if (showModal) {
             setIsLeaderboardLoading(true);
-            fetch('https://xunbao.manantechnosurge.tech/api/leaderboard')
+            fetch('https://xunback.manantechnosurge.tech/api/leaderboard')
                 .then(res => res.json())
                 .then(data => setLeaderboardData(data.data))
                 .catch(err => setLeaderboardError(err))
@@ -154,7 +154,6 @@ const Quiz = () => {
         }
     }, [showModal]);
 
-    // Handle automatic navigation when all questions are answered
     useEffect(() => {
         if (showModal && questions.length === 0) {
             const redirectTimer = setTimeout(() => {
