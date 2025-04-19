@@ -26,11 +26,13 @@ const formSchema = z.object({
     yog: z.string().min(4, "Year of graduation must be valid"),
 });
 
+type ClerkError = {
+    errors: { code: string; message: string }[];
+};
 
 type FormData = z.infer<typeof formSchema>;
 
 const Register = () => {
-    const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
@@ -67,7 +69,6 @@ const Register = () => {
 
         try {
             const passwd = data.email.substring(0,5).toLowerCase() + data.rollNumber.substring(0, 5).toLowerCase();
-            console.log(passwd)
             await signUp.create({
                 emailAddress: data.email,
                 password: passwd
@@ -80,7 +81,7 @@ const Register = () => {
             setVerifying(true);
         } catch (err) {
             console.error(JSON.stringify(err, null, 2));
-            const errorCode = err.errors?.[0]?.code;
+            const errorCode = (err as ClerkError).errors?.[0]?.code;
             if (errorCode === "form_identifier_exists") {
                 setError("This email is already registered.");
             } else if (errorCode === "form_password_pwned") {
@@ -289,7 +290,6 @@ const Register = () => {
                     </form>
                 </Form>
                 <p className="text-center text-white mt-4">Already Have an Account? <a className="text-white hover:underline font-bold" href="/signin">Sign In</a></p>
-                {message && <p className="mt-4 text-sm text-white text-center">{message}</p>}
                 {error && <p className="mt-2 text-sm text-red-500 text-center">{error}</p>}
             </div>
         </div>

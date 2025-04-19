@@ -1,8 +1,6 @@
-import React from 'react'
-
 const NotFound = () => {
   return (
-    <div>NotFound</div>
+    <div className="text-white text-3xl">NotFound</div>
   )
 }
 

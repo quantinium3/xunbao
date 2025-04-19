@@ -36,16 +36,19 @@ const Quiz = () => {
             const resQues = await fetch('https://xunbao.manantechnosurge.tech/api/question');
             const data = await resQues.json();
             const questions = data.data.questions;
+            if(!user) {
+                return []
+            }
 
             const userRes = await fetch(`https://xunbao.manantechnosurge.tech/api/user/${user.id}`);
             const userData = await userRes.json();
             const answeredQuestionIds = userData.data.questions || [];
 
             // Filter out questions that have been answered
-            const unansweredQuestions = questions.filter((q: any) => 
+            const unansweredQuestions = questions.filter((q: any) =>
                 !answeredQuestionIds.includes(q.questionId)
             );
-            
+
             // Sort questions by questionId
             unansweredQuestions.sort((a: any, b: any) => {
                 // Extract numeric part from questionId (assuming format like Q001, Q002)
@@ -68,7 +71,7 @@ const Quiz = () => {
             setQuestions(userQuestions);
             setIsLoading(false);
         };
-        
+
         if (isLoaded && user) {
             loadQuestions();
         }
@@ -85,6 +88,9 @@ const Quiz = () => {
     const submitAnswer = async () => {
         if (!currentQuestion || !selectedOption || isSubmitted) return;
         setIsSubmitted(true);
+        if(!user) {
+            return [];
+        }
 
         try {
             const res = await fetch(`https://xunbao.manantechnosurge.tech/api/submit/${user.id}`, {
@@ -118,7 +124,7 @@ const Quiz = () => {
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
-        
+
         if (!showModal && currentQuestion && !isSubmitted) {
             timer = setInterval(() => {
                 setTimeLeft(prev => {
@@ -131,7 +137,7 @@ const Quiz = () => {
                 });
             }, 1000);
         }
-        
+
         return () => {
             if (timer) clearInterval(timer);
         };
@@ -154,7 +160,7 @@ const Quiz = () => {
             const redirectTimer = setTimeout(() => {
                 navigate('/leaderboard');
             }, 10000);
-            
+
             return () => clearTimeout(redirectTimer);
         }
     }, [showModal, questions, navigate]);
