@@ -57,7 +57,7 @@ const Register = () => {
 
     useEffect(() => {
         if (isSignedIn) {
-            navigate('/quiz')
+            navigate('/whatsapp')
         }
     })
 
@@ -128,7 +128,7 @@ const Register = () => {
                 }
 
                 form.reset();
-                navigate("/quiz");
+                navigate("/whatsapp");
             } else {
                 setError("Verification incomplete. Try again.");
             }

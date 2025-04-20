@@ -1,6 +1,6 @@
 export const SpaceElements = () => {
     return (
-        <div className={`fixed z-10 min-h-screen overflow-hidden w-full`}>
+        <div className={`fixed z-1 min-h-screen overflow-hidden w-full`}>
             <div>
                 <img
                     src="/plane.gif"

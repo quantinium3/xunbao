@@ -10,6 +10,7 @@ import Quiz from './pages/Quiz'
 import { SignIn } from './pages/SignIn'
 import LeaderBoard from './pages/LeaderBoard'
 import NotFound from './pages/NotFound'
+import { Whatsapp } from './pages/Whatsapp'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
             {
                 path: "leaderboard",
                 element: <LeaderBoard />,
+            },
+            {
+                path: "whatsapp",
+                element: <Whatsapp />,
             },
             {
                 path: "*",
