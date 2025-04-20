@@ -142,7 +142,7 @@ const Register = () => {
 
     if (verifying) {
         return (
-            <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 space-y-8 top=1/2">
+            <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 space-y-8 top=1/2">
                 <h1 className="text-2xl font-bold text-white">Verify your email</h1>
                 <form onSubmit={handleVerify} className="space-y-4 w-full max-w-sm">
                     <label htmlFor="code" className="text-white">

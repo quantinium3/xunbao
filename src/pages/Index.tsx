@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 const Index = () => {
     return (
         <>
-            <div className="absolute inset-0 opacity-30 pointer-events-none z-10">
+            <div className="absolute inset-0 opacity-30 pointer-events-none z-10 overflow-hidden">
                 <div className="w-full h-full bg-gradient-to-r from-purple-800/20 via-transparent to-blue-800/20 animate-nebula"></div>
             </div>
 

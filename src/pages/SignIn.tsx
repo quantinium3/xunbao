@@ -72,7 +72,7 @@ export const SignIn = () => {
     };
 
     return (
-        <div className="absolute w-full top-1/6 z-10 flex flex-col items-center justify-center px-4 space-y-8">
+        <div className="absolute w-full top-1/6 z-10 flex flex-col items-center justify-center px-4 space-y-8 min-h-screen ">
             <h1 className="text-xl md:text-2xl lg:text-3xl font-semibold underline text-white text-center">
                 Sign In
             </h1>
