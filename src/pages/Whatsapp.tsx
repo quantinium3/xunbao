@@ -10,7 +10,7 @@ export const Whatsapp = () => {
                 onClick={handleRedirect}
                 className="border py-3 px-6 rounded bg-green-500 text-white text-xl shadow-[3px_4px_0_white] hover:bg-green-600 transition"
             >
-                Message on WhatsApp
+                Join Whatsapp Group
             </button>
         </div>
         </div>
