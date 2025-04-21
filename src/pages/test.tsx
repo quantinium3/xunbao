@@ -64,7 +64,7 @@ type LeaderboardEntry = {
             }
 
             try {
-                const response = await fetch(`http://localhost:8000/api/question`);
+                const response = await fetch(`https://xunback.manantechnosurge.tech/api/question`);
                 if (!response.ok) {
                     throw new Error(`Failed to fetch questions: ${response.status}`);
                 }
@@ -194,7 +194,7 @@ type LeaderboardEntry = {
 
     const fetchLeaderboard = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/leaderboard`);
+            const response = await fetch(`https://xunback.manantechnosurge.tech/api/leaderboard`);
             if (!response.ok) {
                 throw new Error(`Failed to fetch leaderboard: ${response.status}`);
             }
@@ -211,7 +211,7 @@ type LeaderboardEntry = {
         
         try {
             console.log("timeleft: ", timeLeft)
-            const response = await fetch(`http://localhost:8000/api/submit/${actualUserId}`, {
+            const response = await fetch(`https://xunback.manantechnosurge.tech/api/submit/${actualUserId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
