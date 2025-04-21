@@ -10,6 +10,7 @@ interface LeaderboardEntry {
 
 const LeaderBoard: React.FC = () => {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [userRank, setUserRank] = useState<number | string>("N/A");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useUser();
@@ -22,9 +23,15 @@ const LeaderBoard: React.FC = () => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
         const json = await response.json();
-        if (json.status === "success" && Array.isArray(json.data)) {
+        if (
+          json.status === "success" &&
+          json.data &&
+          Array.isArray(json.data.leaderboard)
+        ) {
           setLeaderboard(json.data.leaderboard);
+          setUserRank(json.data.user?.rank ?? "N/A");
         } else {
           setError("Invalid data format");
         }
@@ -35,27 +42,27 @@ const LeaderBoard: React.FC = () => {
         setLoading(false);
       }
     };
+
     fetchLeaderboard();
-  }, []);
+  }, [clerkUserId]);
 
-  // Sort leaderboard by rank
   const sortedLeaderboard = [...leaderboard].sort((a, b) => a.rank - b.rank);
-  
-  // Find current user's entry
-  const userEntry = sortedLeaderboard.find((entry) => entry.userId === clerkUserId);
-  const userRank = userEntry ? userEntry.rank : "N/A";
 
-  if (loading) return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white">
-      <div className="text-center p-5">Loading leaderboard...</div>
-    </div>
-  );
+  if (loading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white">
+        <div className="text-center p-5">Loading leaderboard...</div>
+      </div>
+    );
+  }
 
-  if (error) return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white">
-      <div className="text-center p-5 text-red-400">Error: {error}</div>
-    </div>
-  );
+  if (error) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white">
+        <div className="text-center p-5 text-red-400">Error: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white overflow-auto">
@@ -64,15 +71,15 @@ const LeaderBoard: React.FC = () => {
           <h2 className="font-bold underline text-3xl">Leaderboard</h2>
           <h2 className="font-bold underline text-xl mt-5">Your Position is {userRank}</h2>
         </div>
-        
+
         <div className="mt-5 max-h-[60vh] overflow-y-auto">
           <table className="w-full divide-y divide-gray-200">
             <thead className="sticky top-0 bg-black backdrop-blur">
               <tr>
-                <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-center border">
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-center border">
                   Rank
                 </th>
-                <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-center border">
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-center border">
                   Player
                 </th>
               </tr>
@@ -80,20 +87,20 @@ const LeaderBoard: React.FC = () => {
             <tbody className="divide-y divide-gray-200">
               {sortedLeaderboard.length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="px-4 py-3 text-sm text-center">
+                  <td colSpan={2} className="px-4 py-3 text-sm text-center">
                     No leaderboard data available
                   </td>
                 </tr>
               ) : (
-                sortedLeaderboard.map((entry: LeaderboardEntry) => (
+                sortedLeaderboard.map((entry) => (
                   <tr
                     key={entry.userId}
                     className={entry.userId === clerkUserId ? "bg-zinc-200/20" : ""}
                   >
-                    <td className="border px-4 py-3 whitespace-nowrap text-sm font-medium">
+                    <td className="border px-4 py-3 whitespace-nowrap text-sm font-medium text-center">
                       #{entry.rank}
                     </td>
-                    <td className="border px-4 py-3 whitespace-nowrap text-sm">
+                    <td className="border px-4 py-3 whitespace-nowrap text-sm text-center">
                       {entry.username}
                     </td>
                   </tr>
