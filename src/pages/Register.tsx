@@ -69,7 +69,7 @@ const Register = () => {
         setCachedFormData(data);
 
         try {
-            const passwd = data.email.substring(0, 5).toLowerCase() + data.rollNumber.substring(0, 5).toLowerCase();
+            const passwd = data.email.substring(0, 5).toLowerCase() + "@" + data.rollNumber.slice(-5).toLowerCase();
             await signUp.create({
                 emailAddress: data.email,
                 password: passwd
