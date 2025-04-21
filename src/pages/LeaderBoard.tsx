@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 interface LeaderboardEntry {
   userId: string;
@@ -16,6 +17,7 @@ const LeaderBoard: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { user } = useUser();
   const clerkUserId = user?.id || "";
+  const navigate = useNavigate();
 
   const fetchLeaderboard = async () => {
     setLoading(true);
