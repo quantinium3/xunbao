@@ -2,6 +2,7 @@ import { Outlet } from "react-router"
 import { SpaceElements } from "./components/SpaceElements"
 import StarField from "./components/Starfield"
 import { UserButton } from "@clerk/clerk-react"
+import { Toaster } from "sonner";
 
 const Layout = () => {
     return (
@@ -9,9 +10,10 @@ const Layout = () => {
             <StarField />
             <SpaceElements />
             <div className="absolute top-4 right-4 z-50">
-                <UserButton/>
+                <UserButton />
             </div>
             <Outlet />
+            <Toaster richColors />
         </>
     )
 }
