@@ -18,13 +18,13 @@ const LeaderBoard: React.FC = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await fetch("https://xunback.manantechnosurge.tech/api/leaderboard");
+        const response = await fetch(`https://xunback.manantechnosurge.tech/api/leaderboard/${clerkUserId}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const json = await response.json();
         if (json.status === "success" && Array.isArray(json.data)) {
-          setLeaderboard(json.data);
+          setLeaderboard(json.data.leaderboard);
         } else {
           setError("Invalid data format");
         }
