@@ -100,7 +100,7 @@ export const SignIn = () => {
                                     <FormLabel className="text-white flex flex-col items-start">
                                         Password
                                         <span className="text-xs">
-                                            first 5 letters of email + first 5 letters of roll number
+                                            first 5 letters of email + @ + last 5 letter of rollnumber
                                         </span>
                                     </FormLabel>
                                     <FormControl>
