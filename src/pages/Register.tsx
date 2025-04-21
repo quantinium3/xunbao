@@ -19,7 +19,7 @@ import { useNavigate } from "react-router";
 
 const formSchema = z.object({
     username: z.string().min(1, "Full name is required"),
-    rollNumber: z.string().min(1, "Roll number is required"),
+    rollNumber: z.string().min(5, "Roll number is required and input your full roll number"),
     email: z.string().min(3, "Invalid email format"),
     branch: z.string().min(1, "Branch is required"),
     course: z.string().min(1, "Course is required"),
