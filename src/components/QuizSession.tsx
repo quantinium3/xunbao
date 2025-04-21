@@ -213,8 +213,8 @@ export const useQuizSession = (userId: string | undefined) => {
             }
 
             const data = await res.json();
-            setLeaderboard(data.data || [])
-            setUserRank(data.data.user.rank || "N/A")
+            setLeaderboard(data.data.leaderboard || []);
+            setUserRank(String(data.data.user?.rank || "N/A"));
         } catch (err) {
             console.error("Error fetching leaderboard: ", err)
             setError("Failed to fetch leaderboards")
