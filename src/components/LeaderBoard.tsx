@@ -9,13 +9,11 @@ interface LeaderBoardProps {
   LeaderBoard: LeaderBoardEntry[];
   timeLeft: string | number;
   clerkUserId: string;
+  userRank: string
 }
 
-const LeaderBoard = ({ LeaderBoard, timeLeft, clerkUserId }: LeaderBoardProps) => {
+const LeaderBoard = ({ LeaderBoard, timeLeft, clerkUserId, userRank}: LeaderBoardProps) => {
   const sortedLeaderBoard = [...LeaderBoard].sort((a, b) => a.rank - b.rank);
-
-  const userEntry = sortedLeaderBoard.find((entry) => entry.userId === clerkUserId);
-  const userRank = userEntry ? userEntry.rank : "N/A";
 
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center px-4 text-white overflow-auto">

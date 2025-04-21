@@ -35,6 +35,7 @@ export const useQuizSession = (userId: string | undefined) => {
     const [timeLeft, setTimeLeft] = useState(20);
     const [leaderboardTimeLeft, setLeaderboardTimeLeft] = useState(10);
     const [leaderboard, setLeaderboard] = useState<Leaderboard[]>([]);
+    const [userRank, setUserRank] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -59,7 +60,7 @@ export const useQuizSession = (userId: string | undefined) => {
 
                 const data = await res.json();
                 console.log(data.data.unansweredQuestions)
-                
+
                 if (!data.data || !data.data.unansweredQuestions || data.data.unansweredQuestions.length === 0) {
                     console.log("redirecting to /leaderboard")
                     setCompleted(true)
@@ -69,7 +70,7 @@ export const useQuizSession = (userId: string | undefined) => {
                 }
 
                 const backendQuestions = data.data.unansweredQuestions;
-                
+
                 let firstUnansweredIndex = 0;
                 for (let i = 0; i < backendQuestions.length; i++) {
                     if (!backendQuestions[i].answered) {
@@ -84,7 +85,7 @@ export const useQuizSession = (userId: string | undefined) => {
                         return;
                     }
                 }
-                
+
                 const newSession: QuizSession = {
                     userId: userId,
                     questions: backendQuestions.map((q: any) => ({
@@ -152,15 +153,15 @@ export const useQuizSession = (userId: string | undefined) => {
 
     const incrementQuestion = () => {
         if (!session) return;
-        
+
         const nextIndex = currentIndex + 1;
         console.log("Incrementing Questiong index")
-        
+
         if (nextIndex >= session.questions.length) {
             navigate('/leaderboard');
             return;
         }
-        
+
         setCurrentIndex(nextIndex);
         setTimeLeft(20);
     }
@@ -205,7 +206,7 @@ export const useQuizSession = (userId: string | undefined) => {
 
     const fetchLeaderboard = async () => {
         try {
-            const res = await fetch(`https://xunback.manantechnosurge.tech/api/leaderboard`);
+            const res = await fetch(`https://xunback.manantechnosurge.tech/api/leaderboard/${userId}`);
             if (!res.ok) {
                 console.error(`Failed to fetch leaderboard: ${res.status}`)
                 throw new Error(`Failed to fetch leaderboard: ${res.status}`)
@@ -213,6 +214,7 @@ export const useQuizSession = (userId: string | undefined) => {
 
             const data = await res.json();
             setLeaderboard(data.data || [])
+            setUserRank(data.data.user.rank || "N/A")
         } catch (err) {
             console.error("Error fetching leaderboard: ", err)
             setError("Failed to fetch leaderboards")
@@ -258,7 +260,7 @@ export const useQuizSession = (userId: string | undefined) => {
     }
 
     return {
-        session, currentIndex, timeLeft, answerQuestion, loading, error, leaderboard, showingLeaderboard, leaderboardTimeLeft, setError
+        session, currentIndex, timeLeft, answerQuestion, loading, error, leaderboard, showingLeaderboard, leaderboardTimeLeft, setError, userRank
     }
 }
 // 27 January, 3 February, 10 Feb, 3 March, 17 March, 7 April, 21 April 

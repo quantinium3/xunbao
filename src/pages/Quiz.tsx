@@ -20,7 +20,8 @@ const Quiz = () => {
         leaderboard,
         showingLeaderboard,
         leaderboardTimeLeft,
-        setError
+        setError,
+        userRank
     } = useQuizSession(userId);
 
     useEffect(() => {
@@ -78,6 +79,7 @@ const Quiz = () => {
             LeaderBoard={leaderboard}
             timeLeft={leaderboardTimeLeft}
             clerkUserId={userId}
+            userRank={userRank}
         />
     }
 
