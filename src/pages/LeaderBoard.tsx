@@ -1,101 +1,110 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 
-type LeaderboardEntry = {
-    rank: number;
-    userId: string;
-    username: string;
-    score: number;
-};
+interface LeaderboardEntry {
+  userId: string;
+  rank: number;
+  username: string;
+  score: number;
+}
 
 const LeaderBoard: React.FC = () => {
-    const [data, setData] = useState<LeaderboardEntry[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const { user } = useUser();
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { user } = useUser();
+  const clerkUserId = user?.id || "";
 
-    useEffect(() => {
-        const fetchLeaderboard = async () => {
-            try {
-                const response = await fetch("https://xunback.manantechnosurge.tech/api/leaderboard");
-                const json = await response.json();
-                if (json.status === "success" && Array.isArray(json.data)) {
-                    setData(json.data);
-                } else {
-                    setError("Invalid data format");
-                }
-            } catch (err) {
-                setError("Failed to fetch leaderboard");
-                console.log("Error", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchLeaderboard();
-    }, []);
-
-    const currentUserEntry = data.find((entry) => entry.userId === user?.id);
-    const currentUserRank = currentUserEntry ? currentUserEntry.rank : null;
-
-    // Function to render medal based on rank
-    const renderMedal = (rank: number) => {
-        switch (rank) {
-            case 1:
-                return <span className="text-xl md:text-2xl">🥇</span>;
-            case 2:
-                return <span className="text-xl md:text-2xl">🥈</span>;
-            case 3:
-                return <span className="text-xl md:text-2xl">🥉</span>;
-            default:
-                return rank;
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const response = await fetch("https://xunback.manantechnosurge.tech/api/leaderboard");
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        const json = await response.json();
+        if (json.status === "success" && Array.isArray(json.data)) {
+          setLeaderboard(json.data);
+        } else {
+          setError("Invalid data format");
+        }
+      } catch (err) {
+        setError("Failed to fetch leaderboard");
+        console.error("Error", err);
+      } finally {
+        setLoading(false);
+      }
     };
+    fetchLeaderboard();
+  }, []);
 
-    if (loading) return <p className="text-center p-4">Loading leaderboard...</p>;
-    if (error) return <p className="text-center p-4">Error: {error}</p>;
+  // Sort leaderboard by rank
+  const sortedLeaderboard = [...leaderboard].sort((a, b) => a.rank - b.rank);
+  
+  // Find current user's entry
+  const userEntry = sortedLeaderboard.find((entry) => entry.userId === clerkUserId);
+  const userRank = userEntry ? userEntry.rank : "N/A";
 
-    return (
-        <div className="fixed p-2 sm:p-4 w-full h-full z-50 flex items-center justify-center text-white">
-            <div className="border p-3 sm:p-4 md:p-5 rounded-md w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl bg-black/50 backdrop-blur-md shadow-[2px_3px_0_white] overflow-auto max-h-[90vh]">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-2 text-center underline">Leaderboard</h2>
-                
-                {user && currentUserRank ? (
-                    <p className="text-center mb-2 md:mb-4 font-bold text-lg sm:text-xl md:text-2xl">
-                        Your Current Rank: {renderMedal(currentUserRank)} {currentUserRank}
-                    </p>
-                ) : user && !currentUserRank ? (
-                    <p className="text-center mb-2 md:mb-4 text-sm sm:text-base">You are not ranked yet.</p>
-                ) : null}
-                
-                <div className="overflow-x-auto">
-                    <table className="w-full border-collapse border border-gray-300 rounded-md">
-                        <thead>
-                            <tr>
-                                <th className="border border-gray-300 p-1 sm:p-2 text-xs sm:text-sm md:text-base">Rank</th>
-                                <th className="border border-gray-300 p-1 sm:p-2 text-xs sm:text-sm md:text-base">Username</th>
-                                <th className="border border-gray-300 p-1 sm:p-2 text-xs sm:text-sm md:text-base">Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data.map((entry) => (
-                                <tr key={entry.userId} className={entry.userId === user?.id ? "bg-zinc-700/50" : ""}>
-                                    <td className="border border-gray-300 p-1 sm:p-2 text-center text-xs sm:text-sm md:text-base">
-                                        {renderMedal(entry.rank)} {entry.rank > 3 ? entry.rank : ""}
-                                    </td>
-                                    <td className="border border-gray-300 p-1 sm:p-2 text-center text-xs sm:text-sm md:text-base truncate max-w-[100px] sm:max-w-none">
-                                        {entry.username}
-                                    </td>
-                                    <td className="border border-gray-300 p-1 sm:p-2 text-center text-xs sm:text-sm md:text-base">
-                                        {entry.score}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+  if (loading) return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white">
+      <div className="text-center p-5">Loading leaderboard...</div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white">
+      <div className="text-center p-5 text-red-400">Error: {error}</div>
+    </div>
+  );
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white overflow-auto">
+      <div className="relative border p-5 rounded-md max-w-3xl w-full text-center backdrop-blur bg-black/50">
+        <div className="max-w-prose mx-auto">
+          <h2 className="font-bold underline text-3xl">Leaderboard</h2>
+          <h2 className="font-bold underline text-xl mt-5">Your Position is {userRank}</h2>
         </div>
-    );
+        
+        <div className="mt-5 max-h-[60vh] overflow-y-auto">
+          <table className="w-full divide-y divide-gray-200">
+            <thead className="sticky top-0 bg-black backdrop-blur">
+              <tr>
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-center border">
+                  Rank
+                </th>
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-center border">
+                  Player
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {sortedLeaderboard.length === 0 ? (
+                <tr>
+                  <td colSpan={3} className="px-4 py-3 text-sm text-center">
+                    No leaderboard data available
+                  </td>
+                </tr>
+              ) : (
+                sortedLeaderboard.map((entry: LeaderboardEntry) => (
+                  <tr
+                    key={entry.userId}
+                    className={entry.userId === clerkUserId ? "bg-zinc-200/20" : ""}
+                  >
+                    <td className="border px-4 py-3 whitespace-nowrap text-sm font-medium">
+                      #{entry.rank}
+                    </td>
+                    <td className="border px-4 py-3 whitespace-nowrap text-sm">
+                      {entry.username}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default LeaderBoard;

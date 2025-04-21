@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import XButton from '@/components/XButton'
 import { useNavigate } from "react-router";
 
 const formSchema = z.object({
@@ -68,7 +69,7 @@ const Register = () => {
         setCachedFormData(data);
 
         try {
-            const passwd = data.email.substring(0,5).toLowerCase() + data.rollNumber.substring(0, 5).toLowerCase();
+            const passwd = data.email.substring(0, 5).toLowerCase() + data.rollNumber.substring(0, 5).toLowerCase();
             await signUp.create({
                 emailAddress: data.email,
                 password: passwd
@@ -142,7 +143,7 @@ const Register = () => {
 
     if (verifying) {
         return (
-            <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 space-y-8 top=1/2">
+            <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 space-y-8">
                 <h1 className="text-2xl font-bold text-white">Verify your email</h1>
                 <form onSubmit={handleVerify} className="space-y-4 w-full max-w-sm">
                     <label htmlFor="code" className="text-white">
@@ -277,16 +278,18 @@ const Register = () => {
                             )}
                         />
                         <div id="clerk-captcha" data-cl-theme="dark" data-cl-size="flexible" data-cl-language="es-ES" />
-                        <Button type="submit" disabled={isLoading} className="w-full">
-                            {isLoading ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Registering...
-                                </>
-                            ) : (
-                                "Register"
-                            )}
-                        </Button>
+                        <div className="flex items-center">
+                            <XButton type="submit" disabled={isLoading} className="text-white rounded-md border px-3 py-2 w-full text-lg sm:text-xl font-semibold transition-colors duration-300 shadow-[3px_4px_0_white] active:shadow-[1px_2px_0_white]">
+                                {isLoading ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Registering...
+                                    </>
+                                ) : (
+                                    "Register"
+                                )}
+                            </XButton>
+                        </div>
                     </form>
                 </Form>
                 <p className="text-center text-white mt-4">Already Have an Account? <a className="text-white hover:underline font-bold" href="/signin">Sign In</a></p>
