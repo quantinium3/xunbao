@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
+import { toast } from "sonner";
 
 interface LeaderboardEntry {
   userId: string;
@@ -10,56 +11,96 @@ interface LeaderboardEntry {
 
 const LeaderBoard: React.FC = () => {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
-  const [userRank, setUserRank] = useState<number | string>("N/A");
+  const [userRank, setUserRank] = useState<string | number>("N/A");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useUser();
   const clerkUserId = user?.id || "";
 
-  useEffect(() => {
-    const fetchLeaderboard = async () => {
-      try {
-        const response = await fetch(`https://xunback.manantechnosurge.tech/api/leaderboard/${clerkUserId}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+  const fetchLeaderboard = async () => {
+    setLoading(true);
+    setError(null);
 
-        const json = await response.json();
-        if (
-          json.status === "success" &&
-          json.data &&
-          Array.isArray(json.data.leaderboard)
-        ) {
-          setLeaderboard(json.data.leaderboard);
-          setUserRank(json.data.user?.rank ?? "N/A");
-        } else {
-          setError("Invalid data format");
-        }
-      } catch (err) {
-        setError("Failed to fetch leaderboard");
-        console.error("Error", err);
-      } finally {
-        setLoading(false);
+    try {
+      if (!clerkUserId) {
+        throw new Error("User not authenticated. Please sign in.");
       }
-    };
 
+      const response = await fetch(`https://xunback.manantechnosurge.tech/api/leaderboard/${clerkUserId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
+      }
+
+      const json = await response.json();
+      if (
+        json.status === "success" &&
+        json.data &&
+        Array.isArray(json.data.leaderboard) &&
+        json.data.user
+      ) {
+        setLeaderboard(json.data.leaderboard);
+        setUserRank(json.data.user.rank ?? "N/A");
+      } else {
+        console.error("Invalid API response:", json);
+        throw new Error("Invalid data format received from server");
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+      setError(errorMessage);
+      console.error("Leaderboard fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchLeaderboard();
   }, [clerkUserId]);
 
-  const sortedLeaderboard = [...leaderboard].sort((a, b) => a.rank - b.rank);
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   if (loading) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white">
-        <div className="text-center p-5">Loading leaderboard...</div>
+      <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white bg-black/50">
+        <div className="text-center p-5 rounded-md bg-black/70 backdrop-blur">
+          Loading leaderboard...
+        </div>
+      </div>
+    );
+  }
+
+  if (!clerkUserId) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white bg-black/50">
+        <div className="text-center p-5 rounded-md bg-black/70 backdrop-blur">
+          <p>Please sign in to view the leaderboard</p>
+          <button
+            onClick={() => navigate("/signin")}
+            className="mt-3 px-4 py-2 border rounded-md hover:bg-zinc-300/20"
+          >
+            Sign In
+          </button>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white">
-        <div className="text-center p-5 text-red-400">Error: {error}</div>
+      <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white bg-black/50">
+        <div className="text-center p-5 rounded-md bg-black/70 backdrop-blur text-red-400">
+          <p>Error: {error}</p>
+          <button
+            onClick={fetchLeaderboard}
+            className="mt-3 px-4 py-2 border rounded-md hover:bg-zinc-300/20"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     );
   }
@@ -74,25 +115,28 @@ const LeaderBoard: React.FC = () => {
 
         <div className="mt-5 max-h-[60vh] overflow-y-auto">
           <table className="w-full divide-y divide-gray-200">
-            <thead className="sticky top-0 bg-black backdrop-blur">
+            <thead className="sticky top-0 bg-black/70 backdrop-blur">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-center border">
+                <th className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-center border">
                   Rank
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-center border">
+                <th className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-center border">
                   Player
+                </th>
+                <th className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-center border">
+                  Score
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {sortedLeaderboard.length === 0 ? (
+              {leaderboard.length === 0 ? (
                 <tr>
-                  <td colSpan={2} className="px-4 py-3 text-sm text-center">
+                  <td colSpan={3} className="px-4 py-3 text-sm text-center">
                     No leaderboard data available
                   </td>
                 </tr>
               ) : (
-                sortedLeaderboard.map((entry) => (
+                leaderboard.map((entry) => (
                   <tr
                     key={entry.userId}
                     className={entry.userId === clerkUserId ? "bg-zinc-200/20" : ""}
@@ -102,6 +146,9 @@ const LeaderBoard: React.FC = () => {
                     </td>
                     <td className="border px-4 py-3 whitespace-nowrap text-sm text-center">
                       {entry.username}
+                    </td>
+                    <td className="border px-4 py-3 whitespace-nowrap text-sm text-center">
+                      {entry.score}
                     </td>
                   </tr>
                 ))
