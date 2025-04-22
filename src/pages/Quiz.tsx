@@ -63,12 +63,11 @@ const Quiz = () => {
         )
     }
 
-    const hasPlayed = (userId: string) => {
-        console.log(userId)
+    const hasPlayed = () => {
         return false
     }
 
-    if (hasPlayed(userId) || currentIndex >= session?.questions.length) {
+    if (hasPlayed() || currentIndex >= session?.questions.length) {
         navigate('/leaderboard')
     }
 
@@ -87,7 +86,7 @@ const Quiz = () => {
         <div className="absolute w-full h-screen z-10 flex items-center justify-center px-4 text-white">
             <div className="relative border p-5 rounded-md w-3xl text-center  backdrop-blur">
                 <h2 className="absolute -top-3 left-1/3 lg:left-1/5 transform -translate-x-1/2 px-4 text-sm font-bold bg-black">
-                    Question: {currentIndex + 1}
+                    Question
                 </h2>
 
                 <p className="text-lg mb-6 mt-4 border-b pb-2">{currentQuestion?.question}</p>

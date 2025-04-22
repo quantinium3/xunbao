@@ -20,7 +20,7 @@ const LeaderBoard = ({ LeaderBoard, timeLeft, clerkUserId, userRank}: LeaderBoar
       <div className="relative border p-5 rounded-md max-w-3xl w-full text-center backdrop-blur bg-black/50">
         <div className="max-w-prose mx-auto">
           <h2 className="font-bold underline text-xl lgtext-3xl">LeaderBoard</h2>
-          <h2 className="font-bold underline text-xl mt-5">Your Position is {userRank}</h2>
+          <h2 className="font-bold underline text-xl mt-5">Your current rank is {userRank}</h2>
           <div className="text-sm mt-4">Next question in {timeLeft}</div>
         </div>
 
