@@ -16,10 +16,10 @@ const LeaderBoard = ({ LeaderBoard, timeLeft, clerkUserId, userRank}: LeaderBoar
   const sortedLeaderBoard = [...LeaderBoard].sort((a, b) => a.rank - b.rank);
 
   return (
-    <div className="fixed inset-0 z-10 flex items-center justify-center px-4 text-white overflow-auto">
+    <div className="absolute inset-0 z-30 flex items-center justify-center px-4 text-white overflow-auto">
       <div className="relative border p-5 rounded-md max-w-3xl w-full text-center backdrop-blur bg-black/50">
         <div className="max-w-prose mx-auto">
-          <h2 className="font-bold underline text-3xl">LeaderBoard</h2>
+          <h2 className="font-bold underline text-xl lgtext-3xl">LeaderBoard</h2>
           <h2 className="font-bold underline text-xl mt-5">Your Position is {userRank}</h2>
           <div className="text-sm mt-4">Next question in {timeLeft}</div>
         </div>
