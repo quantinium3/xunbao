@@ -27,6 +27,7 @@ const formSchema = z.object({
     yog: z.string().min(4, "Year of graduation must be valid"),
 });
 
+const backendUri = import.meta.env.VITE_BACKEND_URI
 type ClerkError = {
     errors: { code: string; message: string }[];
 };
@@ -111,7 +112,7 @@ const Register = () => {
             if (signUpAttempt.status === "complete") {
                 await setActive({ session: signUpAttempt.createdSessionId });
 
-                const response = await fetch("https://xunback.manantechnosurge.tech/api/user/create", {
+                const response = await fetch(`${backendUri}/api/user/create`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

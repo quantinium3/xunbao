@@ -25,6 +25,8 @@ interface Leaderboard {
     score: number;
 }
 
+const backendUri = import.meta.env.VITE_BACKEND_URI;
+
 export const useQuizSession = (userId: string | undefined) => {
     const [session, setSession] = useState<QuizSession | null>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -49,7 +51,7 @@ export const useQuizSession = (userId: string | undefined) => {
             setError("")
 
             try {
-                const res = await fetch(`https://xunback.manantechnosurge.tech/api/question/user/${userId}`)
+                const res = await fetch(`${backendUri}/api/question/user/${userId}`)
                 if (!res.ok) {
                     console.error(`Failed to fetch questions: ${res.status}`)
                     setError("Failed to fetch questions")
@@ -206,7 +208,7 @@ export const useQuizSession = (userId: string | undefined) => {
 
     const fetchLeaderboard = async () => {
         try {
-            const res = await fetch(`https://xunback.manantechnosurge.tech/api/leaderboard/${userId}`);
+            const res = await fetch(`${backendUri}/api/leaderboard/${userId}`);
             if (!res.ok) {
                 console.error(`Failed to fetch leaderboard: ${res.status}`)
                 throw new Error(`Failed to fetch leaderboard: ${res.status}`)
@@ -223,7 +225,7 @@ export const useQuizSession = (userId: string | undefined) => {
 
     const submitAnswer = async (question: Question) => {
         try {
-            const res = await fetch(`https://xunback.manantechnosurge.tech/api/submit/${userId}`, {
+            const res = await fetch(`${backendUri}/api/submit/${userId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

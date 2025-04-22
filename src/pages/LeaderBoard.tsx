@@ -10,6 +10,8 @@ interface LeaderboardEntry {
   score: number;
 }
 
+const backendUri = import.meta.env.VITE_BACKEND_URI;
+
 const LeaderBoard: React.FC = () => {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [userRank, setUserRank] = useState<string | number>("N/A");
@@ -28,7 +30,7 @@ const LeaderBoard: React.FC = () => {
         throw new Error("User not authenticated. Please sign in.");
       }
 
-      const response = await fetch(`https://xunback.manantechnosurge.tech/api/leaderboard/${clerkUserId}`);
+      const response = await fetch(`${backendUri}/api/leaderboard/${clerkUserId}`);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
       }
