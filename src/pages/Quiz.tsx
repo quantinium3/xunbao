@@ -99,7 +99,7 @@ const Quiz = () => {
                             ></div>
                         </div>
                         <div className="text-center text-xs">
-                            <span>Time Left: {timeLeft}s (waiting for others to finish)</span>
+                            <span>Time Left: {timeLeft}s</span>
                         </div>
                     </div>
                 </div>
@@ -110,7 +110,8 @@ const Quiz = () => {
                             key={idx}
                             onClick={() => answerQuestion(opt)}
                             disabled={currentQuestion.answered}
-                            className="w-full text-left px-5 py-2 border rounded-md shadow shadow-[3px_4px_0_white] font-bold transition-colors duration-200 active:shadow-[1px_2px_0_white] active:top-[3px] cursor-pointer transition-all relative hover:bg-zinc-300/20"
+                            className={`w-full text-left px-5 py-2 border rounded-md shadow shadow-[3px_4px_0_white] font-bold transition-colors duration-200 active:shadow-[1px_2px_0_white] active:top-[3px] cursor-pointer transition-all relative hover:bg-zinc-300/20 ${currentQuestion.answered ? 'bg-zinc-300/30' : ''
+                                }`}
                         >
                             {opt}
                         </button>
