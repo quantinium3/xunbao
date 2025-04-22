@@ -67,7 +67,7 @@ const LeaderBoard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white bg-black/50">
+      <div className="fixed inset-0 z-30 flex items-center justify-center px-4 text-white bg-black/50">
         <div className="text-center p-5 rounded-md bg-black/70 backdrop-blur">
           Loading leaderboard...
         </div>
@@ -77,7 +77,7 @@ const LeaderBoard: React.FC = () => {
 
   if (!clerkUserId) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white bg-black/50">
+      <div className="fixed inset-0 z-30 flex items-center justify-center px-4 text-white bg-black/50">
         <div className="text-center p-5 rounded-md bg-black/70 backdrop-blur">
           <p>Please sign in to view the leaderboard</p>
           <button
@@ -93,7 +93,7 @@ const LeaderBoard: React.FC = () => {
 
   if (error) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white bg-black/50">
+      <div className="fixed inset-0 z-30 flex items-center justify-center px-4 text-white bg-black/50">
         <div className="text-center p-5 rounded-md bg-black/70 backdrop-blur text-red-400">
           <p>Error: {error}</p>
           <button
@@ -108,7 +108,7 @@ const LeaderBoard: React.FC = () => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 text-white overflow-auto">
+    <div className="fixed inset-0 z-30 flex items-center justify-center px-4 text-white overflow-auto">
       <div className="relative border p-5 rounded-md max-w-3xl w-full text-center backdrop-blur bg-black/50">
         <div className="max-w-prose mx-auto">
           <h2 className="font-bold underline text-3xl">Leaderboard</h2>
