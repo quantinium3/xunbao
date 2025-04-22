@@ -130,7 +130,7 @@ const Register = () => {
                 }
 
                 form.reset();
-                navigate("/whatsapp");
+                navigate("/quiz");
             } else {
                 setError("Verification incomplete. Try again.");
             }
