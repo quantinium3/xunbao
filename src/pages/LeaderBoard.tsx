@@ -125,9 +125,6 @@ const LeaderBoard: React.FC = () => {
                 <th className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-center border">
                   Player
                 </th>
-                <th className="px-4 py-3 text-xs font-medium uppercase tracking-wider text-center border">
-                  Score
-                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -148,9 +145,6 @@ const LeaderBoard: React.FC = () => {
                     </td>
                     <td className="border px-4 py-3 whitespace-nowrap text-sm text-center">
                       {entry.username}
-                    </td>
-                    <td className="border px-4 py-3 whitespace-nowrap text-sm text-center">
-                      {entry.score}
                     </td>
                   </tr>
                 ))
