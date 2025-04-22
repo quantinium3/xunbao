@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import XButton from "@/components/XButton";
 
 interface LeaderboardEntry {
   userId: string;
@@ -67,6 +68,10 @@ const LeaderBoard: React.FC = () => {
     }
   }, [error]);
 
+  const handleSignIn = () => {
+    navigate('/signin')
+  }
+
   if (loading) {
     return (
       <div className="fixed inset-0 z-30 flex items-center justify-center px-4 text-white bg-black/50">
@@ -79,17 +84,12 @@ const LeaderBoard: React.FC = () => {
 
   if (!clerkUserId) {
     return (
-      <div className="fixed inset-0 z-30 flex items-center justify-center px-4 text-white bg-black/50">
-        <div className="text-center p-5 rounded-md bg-black/70 backdrop-blur">
-          <p>Please sign in to view the leaderboard</p>
-          <button
-            onClick={() => navigate("/signin")}
-            className="mt-3 px-4 py-2 border rounded-md hover:bg-zinc-300/20"
-          >
-            Sign In
-          </button>
+        <div className="absolute w-full h-screen z-10 flex items-center justify-center px-4 text-white">
+            <div className="relative border p-5 rounded-md w-3xl text-center backdrop-blur flex flex-col items-center">
+                <h2 className="font-bold text-2xl mb-3">Sign in to view leaderboards</h2>
+                <XButton onClick={handleSignIn} className="text-white rounded-md border px-3 py-2 w-full text-lg sm:text-xl font-semibold transition-colors duration-300 shadow-[3px_4px_0_white] active:shadow-[1px_2px_0_white]">Sign In</XButton>
+            </div>
         </div>
-      </div>
     );
   }
 

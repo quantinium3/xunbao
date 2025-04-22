@@ -59,7 +59,7 @@ const Register = () => {
 
     useEffect(() => {
         if (isSignedIn) {
-            navigate('/whatsapp')
+            navigate('/quiz')
         }
     })
 
