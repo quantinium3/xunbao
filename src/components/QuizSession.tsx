@@ -61,7 +61,6 @@ export const useQuizSession = (userId: string | undefined) => {
 
 
                 const data = await res.json();
-                console.log(data.data.unansweredQuestions)
 
                 if (!data.data || !data.data.unansweredQuestions || data.data.unansweredQuestions.length === 0) {
                     console.log("redirecting to /leaderboard")
