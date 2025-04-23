@@ -5,12 +5,7 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import Layout from './Layout'
 import Index from './pages/Index'
-import Register from './pages/Register'
-import Quiz from './pages/Quiz'
-import { SignIn } from './pages/SignIn'
-import LeaderBoard from './pages/LeaderBoard'
 import NotFound from './pages/NotFound'
-import { Whatsapp } from './pages/Whatsapp'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -27,7 +22,7 @@ const router = createBrowserRouter([
                 index: true,
                 element: <Index />
             },
-            {
+            /* {
                 path: "register",
                 element: <Register />,
             },
@@ -46,7 +41,7 @@ const router = createBrowserRouter([
             {
                 path: "whatsapp",
                 element: <Whatsapp />,
-            },
+            }, */
             {
                 path: "*",
                 element: <NotFound />,
