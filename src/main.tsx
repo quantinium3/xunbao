@@ -8,6 +8,9 @@ import Index from './pages/Index'
 import NotFound from './pages/NotFound'
 import LeaderBoard from './pages/LeaderBoard'
 import { SignIn } from './pages/SignIn'
+import Quiz from './pages/Quiz'
+import Register from './pages/Register'
+import { Whatsapp } from './pages/Whatsapp'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -24,14 +27,14 @@ const router = createBrowserRouter([
                 index: true,
                 element: <Index />
             },
-            /* {
+            {
                 path: "register",
                 element: <Register />,
             },
             {
                 path: "quiz",
                 element: <Quiz />,
-            }, */
+            },
             {
                 path: "signin",
                 element: <SignIn />,
@@ -40,10 +43,10 @@ const router = createBrowserRouter([
                 path: "leaderboard",
                 element: <LeaderBoard />,
             },
-            /* {
+            {
                 path: "whatsapp",
                 element: <Whatsapp />,
-            }, */
+            },
             {
                 path: "*",
                 element: <NotFound />,
