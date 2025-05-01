@@ -6,6 +6,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router'
 import Layout from './Layout'
 import Index from './pages/Index'
 import NotFound from './pages/NotFound'
+import LeaderBoard from './pages/LeaderBoard'
+import { SignIn } from './pages/SignIn'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -29,7 +31,7 @@ const router = createBrowserRouter([
             {
                 path: "quiz",
                 element: <Quiz />,
-            },
+            }, */
             {
                 path: "signin",
                 element: <SignIn />,
@@ -38,7 +40,7 @@ const router = createBrowserRouter([
                 path: "leaderboard",
                 element: <LeaderBoard />,
             },
-            {
+            /* {
                 path: "whatsapp",
                 element: <Whatsapp />,
             }, */
