@@ -1,6 +1,3 @@
-import XButton from '@/components/XButton'
-import { Link } from 'react-router'
-
 const Index = () => {
     return (
         <>
@@ -10,26 +7,9 @@ const Index = () => {
 
             <div className="fixed inset-0 flex items-center justify-center z-10">
                 <div className="flex flex-col items-center text-center px-4 sm:px-6 md:px-8">
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-white mb-6 sm:mb-8 animate-glow drop-shadow-lg">
-                        WELCOME TO XUNBAO
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-white mb-6 sm:mb-8 animate-glow drop-shadow-lg mx-auto">
+                        Thank You for Participating in XUNBAO. Results will be released soon
                     </h1>
-                    <div className='flex flex-col gap-3'>
-                        <Link to="/register" className="flex justify-center">
-                            <XButton className="w-full max-w-xs px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold transition-colors duration-300 border rounded-sm shadow-[3px_4px_0_white] active:shadow-[1px_2px_0_white]">
-                                REGISTER
-                            </XButton>
-                        </Link>
-                        <Link to="/quiz" className="flex justify-center">
-                            <XButton className="w-full max-w-xs px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold transition-colors duration-300 border rounded-sm shadow-[3px_4px_0_white] active:shadow-[1px_2px_0_white]">
-                                Play
-                            </XButton>
-                        </Link>
-                        <Link to="/leaderboard" className="flex justify-center">
-                            <XButton className="w-full max-w-xs px-6 py-3 sm:px-8 sm:py-4 text-lg sm:text-xl font-semibold transition-colors duration-300 border rounded-sm shadow-[3px_4px_0_white] active:shadow-[1px_2px_0_white]">
-                                Leaderboards
-                            </XButton>
-                        </Link>
-                    </div>
                 </div>
             </div>
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-white my-5 text-center">

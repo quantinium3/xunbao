@@ -27,7 +27,7 @@ const router = createBrowserRouter([
                 index: true,
                 element: <Index />
             },
-            {
+            /* {
                 path: "register",
                 element: <Register />,
             },
@@ -46,7 +46,7 @@ const router = createBrowserRouter([
             {
                 path: "whatsapp",
                 element: <Whatsapp />,
-            },
+            }, */
             {
                 path: "*",
                 element: <NotFound />,
