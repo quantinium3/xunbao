@@ -1,0 +1,3 @@
+[submodule "xunbao-back"]
+	path = xunbao-back
+	url = git@github.com:quantinium3/xunbao-back.git
