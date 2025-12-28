@@ -2,10 +2,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
 import { authClient } from "../lib/auth-client";
 import { redirect } from "@tanstack/react-router";
+import { toast } from "react-hot-toast";
+import { useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute('/sign-in')({
 	beforeLoad: async () => {
@@ -21,64 +22,42 @@ export const Route = createFileRoute('/sign-in')({
 
 const signInSchema = z.object({
 	email: z.email("email is invalid"),
-	otp: z.string().optional(),
+	password: z.string()
+		.min(8, "password is too short")
+		.max(32, "password is too long")
+		.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
 })
 
 type SignInType = z.infer<typeof signInSchema>
 
 function SignIn() {
-	const [otpSent, setOtpSent] = useState(false);
-	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
+	const [loading, setLoading] = useState(false);
 
 	const { register, handleSubmit, formState: { errors } } = useForm<SignInType>({
 		resolver: zodResolver(signInSchema),
 		defaultValues: {
 			email: "",
-			otp: "",
+			password: "",
 		},
 	})
 
-	const sendOtp = async (email: string) => {
-		setLoading(true);
-		const { error } = await authClient.emailOtp.sendVerificationOtp({
-			email,
-			type: "sign-in",
-		});
-		setLoading(false);
-		if (error) {
-			console.error("Error sending OTP:", error);
-			alert("Failed to send OTP. Please try again.");
-			return;
-		}
-		setOtpSent(true);
-	};
-
-	const verifyOtp = async (data: SignInType) => {
-		if (!data.otp) return;
-		setLoading(true);
-		const { data: sessionData, error } = await authClient.signIn.emailOtp({
-			email: data.email,
-			otp: data.otp,
-		});
-		setLoading(false);
-		if (error) {
-			console.error("Error verifying OTP:", error);
-			alert("Invalid OTP. Please try again.");
-			return;
-		}
-		if (!sessionData) {
-			alert("Sign-in failed. Please try again.");
-			return;
-		}
-		navigate({ to: "/play" });
-	};
-
 	const onSubmit = async (data: SignInType) => {
-		if (!otpSent) {
-			await sendOtp(data.email);
-		} else {
-			await verifyOtp(data);
+		setLoading(true)
+		const { data: signInData, error } = await authClient.signIn.email({
+			email: data.email,
+			password: data.password,
+		})
+
+		if (error) {
+			console.log("Failed to sign in", error)
+			toast.error("Failed to sign in")
+			return
+		}
+
+		if (signInData.user) {
+			toast.success("Sign in successful")
+			navigate({ to: "/play" })
 		}
 	};
 
@@ -93,30 +72,29 @@ function SignIn() {
 					<div className="flex flex-col space-y-2">
 						<div>
 							<label className="text-sm">Email: </label>
-							<input type="email" className="border-[1px] w-full" {...register("email")} disabled={otpSent} />
+							<input type="text" className="border-[1px] w-full" {...register("email")} />
 						</div>
 						{errors.email && (
-							<span className="text-red-500 text-xs break-words block max-w-full">
+							<span className="text-red-500 text-xs break-words block max-w-full overflow-wrap-anywhere">
 								{errors.email.message}
 							</span>
 						)}
 					</div>
-					{otpSent && (
-						<div className="flex flex-col space-y-2">
-							<div>
-								<label className="text-sm">OTP: </label>
-								<input type="text" className="border-[1px] w-full" {...register("otp")} />
-							</div>
-							{errors.otp && (
-								<span className="text-red-500 text-xs break-words block max-w-full">
-									{errors.otp.message}
-								</span>
-							)}
+
+					<div className="flex flex-col space-y-2">
+						<div>
+							<label className="text-sm">Password: </label>
+							<input type="password" className="border-[1px] w-full" {...register("password")} />
 						</div>
-					)}
+						{errors.password && (
+							<span className="text-red-500 text-xs break-words block max-w-full overflow-wrap-anywhere">
+								{errors.password.message}
+							</span>
+						)}
+					</div>
 				</div>
 				<button className="flex text-sm self-center mx-auto my-3 border-[1px] py-1 px-2" type="submit" disabled={loading}>
-					{loading ? "Loading..." : otpSent ? "Verify OTP" : "Send OTP"}
+					{loading ? "Loading..." : "Submit"}
 				</button>
 			</form>
 		</div>
