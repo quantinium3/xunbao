@@ -1,1 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import "tailwindcss";
+
+@theme {
+	--font-press-start-2p: 'Press Start 2P';
+}
+
+.btn {
+	font-size: 20px;
+  border-radius: 7px;
+  box-shadow: 3px 7px 0px #fff;
+  display: inline-block;
+  transition: all .2s;
+  position: relative;
+  padding: 15px 25px;
+  position: relative;
+	border: white solid 1px;
+  top: 0;
+	color: #fff;
+  cursor: pointer;
+  margin:0 20px;
+}
+
+.btn:active {
+  top: 3px;
+  box-shadow: 0 2px 0px #3f51b5;
+  transition: all .2s;
+}
