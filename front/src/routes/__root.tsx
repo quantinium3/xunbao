@@ -2,6 +2,7 @@ import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { Canvas } from '@react-three/fiber'
 import { Stars } from '../components/Stars'
+import { Toaster } from 'react-hot-toast'
 
 const RootLayout = () => (
 	<div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
@@ -20,6 +21,7 @@ const RootLayout = () => (
 			<ambientLight intensity={0.1} />
 			<Stars />
 		</Canvas>
+		<Toaster />
 		<Outlet />
 		<TanStackRouterDevtools />
 	</div>
