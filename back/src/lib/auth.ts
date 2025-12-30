@@ -7,10 +7,10 @@ import * as schema from "./db/schema/auth-schema";
 
 const resend = new Resend(process.env.RESEND_APIKEY)
 
+const trustedOrigins = process.env.TRUSTED_ORIGINS?.split(',').map(o => o.trim()) ?? ['http://localhost:5173'];
+
 export const auth = betterAuth({
-	trustedOrigins: [
-		"http://localhost:5173",
-	],
+	trustedOrigins,
 	database: drizzleAdapter(db, {
 		provider: "pg",
 		schema,
@@ -31,20 +31,20 @@ export const auth = betterAuth({
 				} else if (type === "sign-in") {
 					subject = "Sign In Verification";
 					text = `Your sign-in code is: ${otp}`;
-				} else if (type === "forget-password") {
+				} else {
 					subject = "Password Reset";
 					text = `Your password reset code is: ${otp}`;
 				}
 
 				try {
-					const { data, error } = await resend.emails.send({
+					const { error } = await resend.emails.send({
 						from: 'mail@mail.quantinium.dev',
 						to: email,
 						subject: subject,
 						text: text,
 					});
 
-					if (error || !data) {
+					if (error) {
 						console.error(`Resend API error:`, error);
 						throw new Error(`Failed to send email: ${error.message}`);
 					}
