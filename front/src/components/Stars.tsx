@@ -22,32 +22,37 @@ function generateStarData(count: number) {
 
 		const temp = Math.random()
 		if (temp > 0.9) {
-			// Blue giants (hot stars)
+			// blue giants
 			colors[i3] = 0.5 + Math.random() * 0.5
 			colors[i3 + 1] = 0.7 + Math.random() * 0.3
 			colors[i3 + 2] = 1.0
 		} else if (temp > 0.75) {
-			// White stars
+
+			// white stars
 			colors[i3] = 0.9 + Math.random() * 0.1
 			colors[i3 + 1] = 0.9 + Math.random() * 0.1
 			colors[i3 + 2] = 1.0
 		} else if (temp > 0.6) {
-			// Yellow stars like our sun
+
+			// yellow stars
 			colors[i3] = 1.0
 			colors[i3 + 1] = 0.8 + Math.random() * 0.2
 			colors[i3 + 2] = 0.4 + Math.random() * 0.4
 		} else if (temp > 0.45) {
-			// Orange stars
+
+			// orange stars
 			colors[i3] = 1.0
 			colors[i3 + 1] = 0.5 + Math.random() * 0.3
 			colors[i3 + 2] = 0.2 + Math.random() * 0.2
 		} else if (temp > 0.3) {
-			// Red dwarfs
+
+			// red dwarfs
 			colors[i3] = 0.8 + Math.random() * 0.2
 			colors[i3 + 1] = 0.3 + Math.random() * 0.3
 			colors[i3 + 2] = 0.1 + Math.random() * 0.2
 		} else {
-			// Cool red giants
+
+			// red giants
 			colors[i3] = 0.9 + Math.random() * 0.1
 			colors[i3 + 1] = 0.2 + Math.random() * 0.2
 			colors[i3 + 2] = 0.05 + Math.random() * 0.1
