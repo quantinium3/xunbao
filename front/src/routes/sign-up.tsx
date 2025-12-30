@@ -2,13 +2,15 @@ import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { OTPInput, type SlotProps } from 'input-otp'
+import { OTPInput } from 'input-otp'
 import { useState } from 'react'
 import { authClient } from '../lib/auth-client'
 import { toast } from 'react-hot-toast'
 import axios from "axios";
 import { redirect } from "@tanstack/react-router";
 import { useNavigate } from "@tanstack/react-router";
+import { Slot } from "../components/slot";
+import { FakeDash } from "../components/dash";
 
 export const Route = createFileRoute('/sign-up')({
 	beforeLoad: async () => {
@@ -98,25 +100,21 @@ function SignUp() {
 
 			toast.success("OTP verified")
 
-			try {
-				const response = await axios.post(
-					`${import.meta.env.VITE_API_URL}/api/v1/user/set-password`, {
-					password: formData.password,
-				}, {
-					withCredentials: true,
-				}
-				);
-
-				if (response.data.success) {
-					console.log("signup success");
-					toast.success("Sign up successful");
-					navigate({ to: "/play" });
-				}
-			} catch (error) {
-				console.error("Error setting password:", error);
-				toast.error("An error occurred while setting password");
+			const response = await axios.post(
+				`${import.meta.env.VITE_API_URL}/api/v1/user/set-password`, {
+				password: formData.password,
+			}, {
+				withCredentials: true,
 			}
-			setIsLoading(false)
+			);
+
+			if (response.data.success) {
+				console.log("signup success");
+				toast.success("Sign up successful");
+				navigate({ to: "/play" });
+			} else {
+				toast.error("Failed to set password");
+			}
 		} catch (error) {
 			console.error("Error during signup:", error)
 			toast.error("An error occurred during sign up")
@@ -225,48 +223,3 @@ function SignUp() {
 	)
 }
 
-function Slot(props: SlotProps) {
-	return (
-		<div
-			className={cn(
-				'relative w-8 h-12 text-[2rem]',
-				'flex items-center justify-center',
-				'transition-all duration-300',
-				'border-border border-y border-r first:border-l first:rounded-l-md last:rounded-r-md',
-				'group-hover:border-accent-foreground/20 group-focus-within:border-accent-foreground/20',
-				'outline-0 outline-accent-foreground/20',
-				{ 'outline-4 outline-accent-foreground': props.isActive },
-			)}
-		>
-			<div className="group-has-[input[data-input-otp-placeholder-shown]]:opacity-20">
-				{props.char ?? props.placeholderChar}
-			</div>
-			{props.hasFakeCaret && <FakeCaret />}
-		</div>
-	)
-}
-
-function FakeCaret() {
-	return (
-		<div className="absolute pointer-events-none inset-0 flex items-center justify-center animate-caret-blink">
-			<div className="w-px h-8 bg-white" />
-		</div>
-	)
-}
-
-function FakeDash() {
-	return (
-		<div className="flex w-10 justify-center items-center">
-			<div className="w-3 h-1 rounded-full bg-border bg-white" />
-		</div>
-	)
-}
-
-import { clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-
-import type { ClassValue } from 'clsx'
-
-function cn(...inputs: ClassValue[]) {
-	return twMerge(clsx(inputs))
-}

@@ -44,20 +44,27 @@ function SignIn() {
 
 	const onSubmit = async (data: SignInType) => {
 		setLoading(true)
-		const { data: signInData, error } = await authClient.signIn.email({
-			email: data.email,
-			password: data.password,
-		})
+		try {
+			const { data: signInData, error } = await authClient.signIn.email({
+				email: data.email,
+				password: data.password,
+			})
 
-		if (error) {
-			console.log("Failed to sign in", error)
-			toast.error("Failed to sign in")
-			return
-		}
+			if (error) {
+				console.log("Failed to sign in", error)
+				toast.error("Failed to sign in")
+				return
+			}
 
-		if (signInData.user) {
-			toast.success("Sign in successful")
-			navigate({ to: "/play" })
+			if (signInData.user) {
+				toast.success("Sign in successful")
+				navigate({ to: "/play" })
+			}
+		} catch (error) {
+			console.error("Sign in error:", error)
+			toast.error("An error occurred during sign in")
+		} finally {
+			setLoading(false)
 		}
 	};
 
