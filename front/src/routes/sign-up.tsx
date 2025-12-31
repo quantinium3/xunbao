@@ -203,7 +203,7 @@ function SignUp() {
 
 				{!otpEnabled ? (
 					<button
-						className="flex text-sm my-3 border-[1px] py-1 px-2 mx-3 hover:bg-white hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+						className="flex text-sm my-3 border-[1px] py-1 px-2 mx-auto hover:bg-white hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 						type="submit"
 						disabled={isLoading}
 					>
@@ -211,7 +211,7 @@ function SignUp() {
 					</button>
 				) : (
 					<button
-						className="flex text-sm my-3 border-[1px] py-1 px-2 mx-3 hover:bg-white hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+						className="flex mx-auto text-sm my-3 border-[1px] py-1 px-2 hover:bg-white hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 						type="button"
 						onClick={onOTPSubmit}
 						disabled={isLoading || otp.length !== 6}
@@ -219,8 +219,8 @@ function SignUp() {
 						{isLoading ? "Verifying..." : "Verify & Sign Up"}
 					</button>
 				)}
+				<div className="text-xs text-center">Already have an account? <Link to="/sign-in" className="underline">Sign in</Link></div>
 			</form>
-			<span>Already have an account? <Link to="/sign-in" className="underline">Sign in</Link></span>
 		</div>
 	)
 }

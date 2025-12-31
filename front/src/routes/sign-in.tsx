@@ -101,10 +101,10 @@ function SignIn() {
 						)}
 					</div>
 				</div>
-				<button className="flex text-sm self-center mx-auto my-3 border-[1px] py-1 px-2" type="submit" disabled={loading}>
+				<button className="flex text-sm self-center mx-auto my-3 border-[1px] py-1 px-2 hover:text-black hover:bg-white" type="submit" disabled={loading}>
 					{loading ? "Loading..." : "Submit"}
 				</button>
-				<span>Don't have an account? <Link to="/sign-up" className="underline">Sign up</Link></span>
+				<div className="text-xs text-center">Don't have an account? <Link to="/sign-up" className="underline">Sign up</Link></div>
 			</form>
 		</div>
 	)
