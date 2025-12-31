@@ -11,6 +11,7 @@ import { redirect } from "@tanstack/react-router";
 import { useNavigate } from "@tanstack/react-router";
 import { Slot } from "../components/slot";
 import { FakeDash } from "../components/dash";
+import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute('/sign-up')({
 	beforeLoad: async () => {
@@ -219,6 +220,7 @@ function SignUp() {
 					</button>
 				)}
 			</form>
+			<span>Already have an account? <Link to="/sign-in" className="underline">Sign in</Link></span>
 		</div>
 	)
 }

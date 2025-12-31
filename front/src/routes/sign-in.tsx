@@ -7,6 +7,7 @@ import { redirect } from "@tanstack/react-router";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute('/sign-in')({
 	beforeLoad: async () => {
@@ -103,6 +104,7 @@ function SignIn() {
 				<button className="flex text-sm self-center mx-auto my-3 border-[1px] py-1 px-2" type="submit" disabled={loading}>
 					{loading ? "Loading..." : "Submit"}
 				</button>
+				<span>Don't have an account? <Link to="/sign-up" className="underline">Sign up</Link></span>
 			</form>
 		</div>
 	)
