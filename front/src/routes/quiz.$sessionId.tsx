@@ -35,7 +35,7 @@ function RouteComponent() {
 	} = useQuery({
 		queryKey: ["quiz", sessionId, "current"],
 		queryFn: () => quizApi.getCurrentQuestion(sessionId),
-		refetchInterval: isShowingFeedback ? false : 1000,
+		refetchInterval: isShowingFeedback || submitAnswerMutation.isPending ? false : 1000,
 		staleTime: 0,
 		retry: 1,
 	});
