@@ -26,6 +26,7 @@ function RouteComponent() {
 	const [answerFeedback, setAnswerFeedback] = useState<SubmitAnswerResponse | null>(null);
 	const [isShowingFeedback, setIsShowingFeedback] = useState(false);
 	const [timerStoppedAt, setTimerStoppedAt] = useState<number | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const {
 		data: quizState,
@@ -35,7 +36,7 @@ function RouteComponent() {
 	} = useQuery({
 		queryKey: ["quiz", sessionId, "current"],
 		queryFn: () => quizApi.getCurrentQuestion(sessionId),
-		refetchInterval: isShowingFeedback || submitAnswerMutation.isPending ? false : 1000,
+		refetchInterval: isShowingFeedback || isSubmitting ? false : 1000,
 		staleTime: 0,
 		retry: 1,
 	});
@@ -44,6 +45,7 @@ function RouteComponent() {
 		mutationFn: (selectedIndex: number) =>
 			quizApi.submitAnswer(sessionId, { selected_answer_idx: selectedIndex }),
 		onSuccess: (data) => {
+			setIsSubmitting(false);
 			setAnswerFeedback(data);
 			setIsShowingFeedback(true);
 
@@ -59,6 +61,7 @@ function RouteComponent() {
 			}, 3000);
 		},
 		onError: (error) => {
+			setIsSubmitting(false);
 			console.error("Failed to submit answer:", error);
 			toast.error("Failed to submit answer. Please try again.");
 			setTimerStoppedAt(null);
@@ -66,9 +69,10 @@ function RouteComponent() {
 	});
 
 	const handleAnswer = (selectedIndex: number) => {
-		if (isShowingFeedback || submitAnswerMutation.isPending) {
+		if (isShowingFeedback || isSubmitting) {
 			return;
 		}
+		setIsSubmitting(true);
 		setTimerStoppedAt(Date.now());
 		submitAnswerMutation.mutate(selectedIndex);
 	};
@@ -138,7 +142,7 @@ function RouteComponent() {
 						options={quizState.question.options}
 						difficulty={quizState.question.difficulty}
 						onAnswer={handleAnswer}
-						disabled={isShowingFeedback || submitAnswerMutation.isPending}
+						disabled={isShowingFeedback || isSubmitting}
 					/>
 				</div>
 
