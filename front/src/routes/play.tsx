@@ -17,6 +17,11 @@ export const Route = createFileRoute('/play')({
 		if (!session.data?.user) {
 			throw redirect({ to: '/sign-in' });
 		}
+		
+		const user = session.data.user as { roll_number?: string; college?: string; branch?: string; phone_number?: string };
+		if (!user.roll_number || !user.college || !user.branch || !user.phone_number) {
+			throw redirect({ to: '/onboarding' });
+		}
 	},
 	component: RouteComponent,
 })

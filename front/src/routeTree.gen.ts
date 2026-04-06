@@ -9,19 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as PlayRouteImport } from './routes/play'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResultsSessionIdRouteImport } from './routes/results.$sessionId'
 import { Route as QuizSessionIdRouteImport } from './routes/quiz.$sessionId'
 
-const SignUpRoute = SignUpRouteImport.update({
-  id: '/sign-up',
-  path: '/sign-up',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SignInRoute = SignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
@@ -30,6 +25,11 @@ const SignInRoute = SignInRouteImport.update({
 const PlayRoute = PlayRouteImport.update({
   id: '/play',
   path: '/play',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LeaderboardRoute = LeaderboardRouteImport.update({
@@ -56,18 +56,18 @@ const QuizSessionIdRoute = QuizSessionIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/onboarding': typeof OnboardingRoute
   '/play': typeof PlayRoute
   '/sign-in': typeof SignInRoute
-  '/sign-up': typeof SignUpRoute
   '/quiz/$sessionId': typeof QuizSessionIdRoute
   '/results/$sessionId': typeof ResultsSessionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/onboarding': typeof OnboardingRoute
   '/play': typeof PlayRoute
   '/sign-in': typeof SignInRoute
-  '/sign-up': typeof SignUpRoute
   '/quiz/$sessionId': typeof QuizSessionIdRoute
   '/results/$sessionId': typeof ResultsSessionIdRoute
 }
@@ -75,9 +75,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/onboarding': typeof OnboardingRoute
   '/play': typeof PlayRoute
   '/sign-in': typeof SignInRoute
-  '/sign-up': typeof SignUpRoute
   '/quiz/$sessionId': typeof QuizSessionIdRoute
   '/results/$sessionId': typeof ResultsSessionIdRoute
 }
@@ -86,27 +86,27 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/leaderboard'
+    | '/onboarding'
     | '/play'
     | '/sign-in'
-    | '/sign-up'
     | '/quiz/$sessionId'
     | '/results/$sessionId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/leaderboard'
+    | '/onboarding'
     | '/play'
     | '/sign-in'
-    | '/sign-up'
     | '/quiz/$sessionId'
     | '/results/$sessionId'
   id:
     | '__root__'
     | '/'
     | '/leaderboard'
+    | '/onboarding'
     | '/play'
     | '/sign-in'
-    | '/sign-up'
     | '/quiz/$sessionId'
     | '/results/$sessionId'
   fileRoutesById: FileRoutesById
@@ -114,22 +114,15 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LeaderboardRoute: typeof LeaderboardRoute
+  OnboardingRoute: typeof OnboardingRoute
   PlayRoute: typeof PlayRoute
   SignInRoute: typeof SignInRoute
-  SignUpRoute: typeof SignUpRoute
   QuizSessionIdRoute: typeof QuizSessionIdRoute
   ResultsSessionIdRoute: typeof ResultsSessionIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sign-up': {
-      id: '/sign-up'
-      path: '/sign-up'
-      fullPath: '/sign-up'
-      preLoaderRoute: typeof SignUpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/sign-in': {
       id: '/sign-in'
       path: '/sign-in'
@@ -142,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/play'
       fullPath: '/play'
       preLoaderRoute: typeof PlayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/leaderboard': {
@@ -178,9 +178,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LeaderboardRoute: LeaderboardRoute,
+  OnboardingRoute: OnboardingRoute,
   PlayRoute: PlayRoute,
   SignInRoute: SignInRoute,
-  SignUpRoute: SignUpRoute,
   QuizSessionIdRoute: QuizSessionIdRoute,
   ResultsSessionIdRoute: ResultsSessionIdRoute,
 }
