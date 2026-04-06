@@ -22,6 +22,20 @@
       "when": 1767028971923,
       "tag": "0002_moaning_lilith",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1775503549191,
+      "tag": "0003_real_loa",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1775504595016,
+      "tag": "0004_fixed_longshot",
+      "breakpoints": true
     }
   ]
 }
