@@ -27,8 +27,8 @@ export const Route = createFileRoute('/onboarding')({
 			})
 		}
 
-		const user = session.data.user as { roll_number?: string; college?: string; branch?: string; phone_number?: string }
-		if (user.roll_number && user.college && user.branch && user.phone_number) {
+		const user = session.data.user;
+		if (user.is_onboarding_complete) {
 			throw redirect({
 				to: "/play",
 			})
@@ -68,7 +68,7 @@ function Onboarding() {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(data),
+				body: JSON.stringify({ ...data, onboarding_status: true }),
 				credentials: 'include'
 			})
 
@@ -101,9 +101,9 @@ function Onboarding() {
 				<div className="flex flex-col space-y-4 mx-auto justify-center px-3">
 					<div className="flex flex-col space-y-2">
 						<label className="text-sm">Roll Number: </label>
-						<input type="text" className="border-[1px] w-full px-2 py-1" {...register("roll_number")} />
+						<input type="text" className="border w-full px-2 py-1" {...register("roll_number")} />
 						{errors.roll_number && (
-							<span className="text-red-500 text-xs break-words block max-w-full overflow-wrap-anywhere">
+							<span className="text-red-500 text-xs wrap-break-words block max-w-full overflow-wrap-anywhere">
 								{errors.roll_number.message}
 							</span>
 						)}
@@ -111,9 +111,9 @@ function Onboarding() {
 
 					<div className="flex flex-col space-y-2">
 						<label className="text-sm">College: </label>
-						<input type="text" className="border-[1px] w-full px-2 py-1" {...register("college")} />
+						<input type="text" className="border w-full px-2 py-1" {...register("college")} />
 						{errors.college && (
-							<span className="text-red-500 text-xs break-words block max-w-full overflow-wrap-anywhere">
+							<span className="text-red-500 text-xs wrap-break-words block max-w-full overflow-wrap-anywhere">
 								{errors.college.message}
 							</span>
 						)}
