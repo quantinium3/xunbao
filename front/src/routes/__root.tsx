@@ -19,10 +19,10 @@ const RootLayout = () => (
 				zIndex: -2,
 			}}
 		/>
-		<img src="/assets/corner.png" alt="" className="fixed top-4 left-4 w-15 sm:w-20 md:w-25 z-0 invert sepia hue-rotate-30" />
-		<img src="/assets/corner.png" alt="" className="fixed top-4 right-4 w-15 sm:w-20 z-0 md:w-25 invert sepia hue-rotate-30 -scale-x-100" />
-		<img src="/assets/corner.png" alt="" className="fixed bottom-4 left-4 w-15 sm:w-20 z-0 md:w-25 invert sepia hue-rotate-30 -scale-y-100" />
-		<img src="/assets/corner.png" alt="" className="fixed bottom-4 right-4 w-15 sm:w-20 z-0 md:w-25 invert sepia hue-rotate-30 -scale-100" />
+		<img src="/assets/corner.webp" alt="" className="fixed top-4 left-4 w-15 sm:w-20 md:w-25 z-0 invert sepia hue-rotate-30" />
+		<img src="/assets/corner.webp" alt="" className="fixed top-4 right-4 w-15 sm:w-20 z-0 md:w-25 invert sepia hue-rotate-30 -scale-x-100" />
+		<img src="/assets/corner.webp" alt="" className="fixed bottom-4 left-4 w-15 sm:w-20 z-0 md:w-25 invert sepia hue-rotate-30 -scale-y-100" />
+		<img src="/assets/corner.webp" alt="" className="fixed bottom-4 right-4 w-15 sm:w-20 z-0 md:w-25 invert sepia hue-rotate-30 -scale-100" />
 		<Canvas
 			style={{
 				position: 'fixed',
