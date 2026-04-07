@@ -36,7 +36,7 @@ function UserProfileDropdown() {
 	};
 
 	return (
-		<div className="relative" ref={dropdownRef}>
+		<div className="relative font-serif text-xl" ref={dropdownRef}>
 			<button
 				onClick={() => setIsOpen(!isOpen)}
 				className="focus:outline-none rounded-full"
@@ -45,20 +45,20 @@ function UserProfileDropdown() {
 					<img
 						src={session.data?.user.image}
 						alt="pfp"
-						className="w-8 h-8 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+						className="w-7 h-7 sm:w-8 sm:h-8 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
 					/>
 				) : (
 					<img
 						src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
 						alt="pfp"
-						className="w-8 h-8 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+						className="w-7 h-7 sm:w-8 sm:h-8 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
 					/>
 				)}
 			</button>
 
 			{isOpen && (
-				<div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
-					<div className="px-3 py-2 text-sm text-gray-700 border-b border-gray-200">
+				<div className="absolute right-0 mt-2 w-40 sm:w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+					<div className="px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm text-gray-700 border-b border-gray-200">
 						<p className="font-semibold truncate">
 							{session.data?.user.name || session.data?.user.email}
 						</p>
@@ -66,7 +66,7 @@ function UserProfileDropdown() {
 
 					<button
 						onClick={handleLogout}
-						className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+						className="w-full text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 transition-colors"
 					>
 						Logout
 					</button>

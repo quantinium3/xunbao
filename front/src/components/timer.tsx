@@ -27,8 +27,8 @@ export function Timer({ shownAt, stoppedAt }: TimerProps) {
 
 	return (
 		<div className="text-center">
-			<div className="text-sm text-gray-300 mb-1">Time</div>
-			<div className="text-2xl font-bold font-mono">{seconds}s</div>
+			<div className="text-[10px] sm:text-sm text-gray-300 mb-1">Time</div>
+			<div className="text-xl sm:text-2xl font-bold font-mono">{seconds}s</div>
 		</div>
 	);
 }
