@@ -22,6 +22,7 @@ const completeProfileSchema = z.object({
 	college: z.string().min(1, "College is required"),
 	branch: z.string().min(1, "Branch is required"),
 	phone_number: z.string().min(1, "Phone number is required"),
+	onboarding_status: z.boolean()
 });
 
 userRouter.post("/set-password", async (c) => {
@@ -64,7 +65,7 @@ userRouter.post("/complete-profile", async (c) => {
 		}, 400);
 	}
 
-	const { roll_number, college, branch, phone_number } = parseResult.data;
+	const { roll_number, college, branch, phone_number, onboarding_status } = parseResult.data;
 
 	const session = await auth.api.getSession({
 		headers: c.req.raw.headers,
@@ -78,7 +79,7 @@ userRouter.post("/complete-profile", async (c) => {
 	}
 
 	await db.update(user)
-		.set({ roll_number, college, branch, phone_number })
+		.set({ roll_number, college, branch, phone_number, is_onboarding_complete: onboarding_status })
 		.where(eq(user.id, session.user.id));
 
 	return c.json({
