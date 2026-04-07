@@ -1,23 +1,24 @@
 services:
   app:
-    image: ghcr.io/quantinium3/xunback:v-0.1.0
+    image: ghcr.io/quantinium3/xunbao/xunback:latest
     restart: always
     ports:
-      - 3000:3001
+      - 3000:3000
     environment:
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
       - BETTER_AUTH_URL=${BETTER_AUTH_URL}
       - DATABASE_URL=${DATABASE_URL}
-      - RESEND_APIKEY=${RESEND_APIKEY}
-      - CORS_ORIGIN={CORS_ORIGIN}
-      - TRUSTED_ORIGINS={TRUSTED_ORIGINS}
+      - CORS_ORIGIN=${CORS_ORIGIN}
+      - TRUSTED_ORIGINS=${TRUSTED_ORIGINS}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
     depends_on:
       db:
         condition: service_healthy
 
   db:
-    image: postgres:16-alpine
-    restart: always
+    image: postgres:18-alpine
+    restart: unless-stopped
     ports:
       - 5432:5432
     environment:
@@ -27,7 +28,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U xunbao_user -d xunbao_db"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
