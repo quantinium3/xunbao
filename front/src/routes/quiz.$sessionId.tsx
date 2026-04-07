@@ -116,18 +116,18 @@ function RouteComponent() {
 	}
 
 	return (
-		<div className="text-white font-press-start-2p min-h-screen flex flex-col">
+		<div className="text-white min-h-screen flex flex-col font-sans">
 			<Navbar />
 
-			<div className="flex-1 container mx-auto px-4 py-8">
-				<div className="mb-8">
+			<div className="flex-1 container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+				<div className="mb-6 sm:mb-8">
 					<QuizProgress
 						current={quizState.question_index + 1}
 						total={quizState.total_questions}
 					/>
 				</div>
 
-				<div className="flex justify-center gap-8 mb-8">
+				<div className="flex flex-wrap justify-center gap-4 sm:gap-8 mb-6 sm:mb-8">
 					<QuizStats
 						streak={quizState.current_streak}
 						score={quizState.total_score}
@@ -135,7 +135,7 @@ function RouteComponent() {
 					<Timer shownAt={quizState.question.shown_at} stoppedAt={timerStoppedAt} />
 				</div>
 
-				<div className="flex justify-center">
+				<div className="flex justify-center px-2 sm:px-0">
 					<QuestionDisplay
 						key={quizState.question_index}
 						question={quizState.question.text}
@@ -147,16 +147,16 @@ function RouteComponent() {
 				</div>
 
 				{isShowingFeedback && answerFeedback && (
-					<div className="mt-8 flex justify-center">
+					<div className="mt-6 sm:mt-8 flex justify-center px-2 sm:px-0 font-bold">
 						<div
-							className={`p-6 rounded-lg border-2 max-w-2xl w-full ${answerFeedback.is_correct
-								? "bg-green-900/20 border-green-500"
+							className={`p-4 sm:p-6 rounded-lg border-2 max-w-2xl w-full backdrop-blur-2xl ${answerFeedback.is_correct
+								? "bg-black/20 border-[#50C878]"
 								: "bg-red-900/20 border-red-500"
 								}`}
 						>
 							<div className="text-center mb-4">
 								<h2
-									className={`text-2xl mb-2 ${answerFeedback.is_correct
+									className={`text-lg sm:text-2xl mb-2 ${answerFeedback.is_correct
 										? "text-green-400"
 										: "text-red-400"
 										}`}
@@ -164,7 +164,7 @@ function RouteComponent() {
 									{answerFeedback.is_correct ? "CORRECT!" : "WRONG!"}
 								</h2>
 								{!answerFeedback.is_correct && (
-									<p className="text-sm text-gray-300">
+									<p className="text-xs sm:text-sm text-gray-300">
 										Correct answer:{" "}
 										{quizState.question.options[answerFeedback.correct_answer_idx]}
 									</p>
@@ -172,7 +172,7 @@ function RouteComponent() {
 							</div>
 
 							{answerFeedback.is_correct && (
-								<div className="space-y-2 text-sm">
+								<div className="space-y-2 text-xs sm:text-sm">
 									<div className="flex justify-between">
 										<span className="text-gray-300">Base Score:</span>
 										<span className="text-yellow-400">
@@ -204,7 +204,7 @@ function RouteComponent() {
 								</div>
 							)}
 
-							<div className="mt-4 text-center text-xs text-gray-200">
+							<div className="mt-4 text-center text-[10px] sm:text-xs text-gray-200">
 								{answerFeedback.quiz_completed
 									? "Quiz completed! Redirecting..."
 									: "Next question in 3 seconds..."}
@@ -214,7 +214,7 @@ function RouteComponent() {
 				)}
 
 				{(quizState.answered_questions.length > 0 || isShowingFeedback) && (
-					<div className="mt-8 text-center text-sm text-gray-200">
+					<div className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-gray-200 px-2 font-bold">
 						<div>
 							Answered: {quizState.answered_questions.length + (isShowingFeedback ? 1 : 0)} |
 							Correct:{" "}

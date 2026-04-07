@@ -21,7 +21,7 @@ function RouteComponent() {
 
 	if (isLoading) {
 		return (
-			<div className="min-h-screen flex items-center justify-center text-white">
+			<div className="min-h-screen flex items-center justify-center text-white font-sans">
 				<div className="text-center">
 					<div className="text-2xl mb-4">Loading leaderboard...</div>
 					<div className="animate-pulse">Please wait</div>
@@ -32,7 +32,7 @@ function RouteComponent() {
 
 	if (error) {
 		return (
-			<div className="min-h-screen flex items-center justify-center text-white">
+			<div className="min-h-screen flex items-center justify-center text-white font-sans">
 				<div className="text-center">
 					<div className="text-2xl mb-4 text-red-500">Error loading leaderboard</div>
 					<div className="text-gray-200">
@@ -45,29 +45,26 @@ function RouteComponent() {
 
 	if (!leaderboard) {
 		return (
-			<div className="min-h-screen flex items-center justify-center text-white">
+			<div className="min-h-screen flex items-center justify-center text-white font-sans">
 				<div className="text-2xl">No data available</div>
 			</div>
 		);
 	}
 
 	return (
-		<div className="text-white font-press-start-2p min-h-screen flex flex-col">
+		<div className="text-white min-h-screen flex flex-col font-sans">
 			<Navbar />
 
 			<div className="flex-1 container mx-auto px-2 sm:px-4 py-4 sm:py-8 max-w-4xl">
 				<div className="text-center mb-4 sm:mb-8">
-					<h2 className="text-lg sm:text-2xl md:text-4xl mb-2">LEADERBOARD</h2>
-					<p className="text-[8px] sm:text-xs text-gray-200">
-						{leaderboard.total_participants} Total Participants
-					</p>
+					<h2 className="text-3xl sm:text-4xl md:text-5xl mb-2 font-enchanted-land underline underline-offset-4 text-yellow-50">LEADERBOARD</h2>
 				</div>
 
 				{leaderboard.user_rank && (
-					<div className="mb-4 sm:mb-8 rounded-lg p-2 sm:p-4">
-						<div className="text-center">
-							<div className="text-[8px] sm:text-xs text-gray-200 mb-2">YOUR RANK</div>
-							<div className="flex justify-between items-center flex-col">
+					<div className="mb-4 sm:mb-8 rounded-lg p-2 sm:p-4 font-bold">
+						<div className="text-left">
+							<div className="text-sm sm:text-lg text-gray-200 mb-2 font-bold">YOUR RANK</div>
+							<div className="flex flex-col">
 								<div>
 									<span className={`text-xl sm:text-2xl ${leaderboard.user_rank.rank === 1
 										? "text-yellow-500"
@@ -82,10 +79,10 @@ function RouteComponent() {
 									</span>
 								</div>
 								<div className="text-right">
-									<div className="text-xs sm:text-sm text-yellow-400">
+									<div className="text-sm sm:text-lg text-yellow-400">
 										{leaderboard.user_rank.score} points
 									</div>
-									<div className="text-[8px] sm:text-xs text-gray-200">
+									<div className="text-sm sm:text-lg text-gray-200">
 										{(leaderboard.user_rank.time_ms / 1000).toFixed(1)}s total
 									</div>
 								</div>
@@ -94,8 +91,9 @@ function RouteComponent() {
 					</div>
 				)}
 
-				<div className="overflow-hidden">
-					<div className="rounded-t-lg border-2 p-2 sm:p-4 grid grid-cols-12 gap-1 sm:gap-4 text-[8px] sm:text-xs border-white">
+
+				<div className="overflow-hidden font-bold backdrop-blur-xl">
+					<div className="rounded-t-lg border-2 p-2 sm:p-4 grid grid-cols-12 gap-1 sm:gap-4 text-sm sm:text-lg border-white">
 						<div className="col-span-2 text-center">RANK</div>
 						<div className="col-span-4 sm:col-span-5">PLAYER</div>
 						<div className="col-span-3 text-right">SCORE</div>

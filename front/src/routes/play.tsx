@@ -99,7 +99,7 @@ function RouteComponent() {
 
 	if (isCheckingSession) {
 		return (
-			<div className="text-white min-h-screen flex items-center justify-center">
+			<div className="text-white min-h-screen flex items-center justify-center font-serif">
 				<div className="text-center">
 					<div className="text-2xl mb-4">Loading...</div>
 					<div className="animate-pulse">Please wait</div>
@@ -109,21 +109,21 @@ function RouteComponent() {
 	}
 
 	return (
-		<div className="text-white font-press-start-2p min-h-screen flex flex-col">
+		<div className="text-white min-h-screen flex flex-col font-serif">
 			<Navbar />
-			<div className="flex justify-center items-center flex-1">
-				<div className="max-w-2xl w-full p-8">
+			<div className="flex justify-center items-center flex-1 px-4">
+				<div className="max-w-2xl w-full p-4 sm:p-8">
 					<div className="flex justify-center">
 						<button
 							onClick={handleStartQuiz}
 							disabled={isStarting}
-							className="btn disabled:opacity-50 disabled:cursor-not-allowed"
+							className="disabled:opacity-50 disabled:cursor-not-allowed border py-3 px-2 rounded-xl duration-300 font-bold text-3xl"
 						>
 							{isStarting ? "Starting..." : "Start Quiz"}
 						</button>
 					</div>
 
-					<ul className="mt-6 text-xs text-gray-200 list-disc list-inside space-y-1 flex flex-col items-center justify-center text-center mx-auto">
+					<ul className="mt-6 text-xs sm:text-lg font-semibold text-gray-200 list-disc list-inside space-y-1 flex flex-col items-center justify-center text-center mx-auto">
 						<li>Answer 15 random questions</li>
 						<li>Build your streak for bonus points</li>
 						<li>Faster answers = higher scores</li>
