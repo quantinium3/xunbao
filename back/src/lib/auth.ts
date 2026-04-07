@@ -35,6 +35,10 @@ export const auth = betterAuth({
 			phone_number: {
 				type: "string",
 				required: false,
+			},
+			is_onboarding_complete: {
+				type: "boolean",
+				required: false
 			}
 		}
 	},

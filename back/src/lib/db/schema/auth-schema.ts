@@ -16,6 +16,7 @@ export const user = pgTable("user", {
   college: text("college"),
   branch: text("branch"),
   phone_number: text("phone_number"),
+  is_onboarding_complete: boolean("is_onboarding_complete"),
 });
 
 export const session = pgTable(

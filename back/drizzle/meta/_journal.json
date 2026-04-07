@@ -36,6 +36,20 @@
       "when": 1775504595016,
       "tag": "0004_fixed_longshot",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1775533752174,
+      "tag": "0005_fine_natasha_romanoff",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1775535516991,
+      "tag": "0006_sleepy_luckman",
+      "breakpoints": true
     }
   ]
 }
