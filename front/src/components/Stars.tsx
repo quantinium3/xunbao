@@ -11,59 +11,46 @@ function generateStarData(count: number) {
 	for (let i = 0; i < count; i++) {
 		const i3 = i * 3
 
-		const r = Math.pow(Math.random(), 0.5)
-		const radius = 10 + 90 * r
-		const theta = Math.random() * Math.PI * 2
-		const phi = Math.acos(Math.random() * 2 - 1)
+		const x = (Math.random() - 0.5) * 60
+		const y = -30 + Math.random() * 60
+		const z = (Math.random() - 0.5) * 30
 
-		positions[i3] = radius * Math.sin(phi) * Math.cos(theta)
-		positions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
-		positions[i3 + 2] = radius * Math.cos(phi)
+		positions[i3] = x
+		positions[i3 + 1] = y
+		positions[i3 + 2] = z
 
 		const temp = Math.random()
 		if (temp > 0.9) {
-			// blue giants
 			colors[i3] = 0.5 + Math.random() * 0.5
 			colors[i3 + 1] = 0.7 + Math.random() * 0.3
 			colors[i3 + 2] = 1.0
 		} else if (temp > 0.75) {
-
-			// white stars
 			colors[i3] = 0.9 + Math.random() * 0.1
 			colors[i3 + 1] = 0.9 + Math.random() * 0.1
 			colors[i3 + 2] = 1.0
 		} else if (temp > 0.6) {
-
-			// yellow stars
 			colors[i3] = 1.0
 			colors[i3 + 1] = 0.8 + Math.random() * 0.2
 			colors[i3 + 2] = 0.4 + Math.random() * 0.4
 		} else if (temp > 0.45) {
-
-			// orange stars
 			colors[i3] = 1.0
 			colors[i3 + 1] = 0.5 + Math.random() * 0.3
 			colors[i3 + 2] = 0.2 + Math.random() * 0.2
 		} else if (temp > 0.3) {
-
-			// red dwarfs
 			colors[i3] = 0.8 + Math.random() * 0.2
 			colors[i3 + 1] = 0.3 + Math.random() * 0.3
 			colors[i3 + 2] = 0.1 + Math.random() * 0.2
 		} else {
-
-			// red giants
 			colors[i3] = 0.9 + Math.random() * 0.1
 			colors[i3 + 1] = 0.2 + Math.random() * 0.2
 			colors[i3 + 2] = 0.05 + Math.random() * 0.1
 		}
 
-		const sizeFactor = 1 - (radius - 10) / 90
-		sizes[i] = (Math.random() * 1.5 + 0.3) * sizeFactor
+		sizes[i] = Math.random() * 2 + 0.5
 
-		velocities[i3] = (Math.random() - 0.5) * 0.005
-		velocities[i3 + 1] = (Math.random() - 0.5) * 0.005
-		velocities[i3 + 2] = (Math.random() - 0.5) * 0.005
+		velocities[i3] = (Math.random() - 0.5) * 0.03
+		velocities[i3 + 1] = Math.random() * 0.04 + 0.02
+		velocities[i3 + 2] = (Math.random() - 0.5) * 0.03
 	}
 
 	return { positions, colors, sizes, velocities }
@@ -91,69 +78,50 @@ function createStarTexture() {
 
 export function Stars() {
 	const meshRef = useRef<THREE.Points>(null)
-	const count = 50000
+	const count = 500
 
 	const starData = generateStarData(count)
 	const { positions, colors, sizes, velocities } = starData
 	const velocitiesRef = useRef(velocities)
 
-	useFrame((state) => {
+	useFrame(() => {
 		if (!meshRef.current) return
 
-		const positions = meshRef.current.geometry.attributes.position.array
-		const time = state.clock.elapsedTime
+		const posArray = meshRef.current.geometry.attributes.position.array
 
 		for (let i = 0; i < count; i++) {
 			const i3 = i * 3
 
-			positions[i3] += velocitiesRef.current[i3]
-			positions[i3 + 1] += velocitiesRef.current[i3 + 1]
-			positions[i3 + 2] += velocitiesRef.current[i3 + 2]
+			posArray[i3] += velocitiesRef.current[i3] + (Math.random() - 0.5) * 0.01
+			posArray[i3 + 1] += velocitiesRef.current[i3 + 1]
+			posArray[i3 + 2] += velocitiesRef.current[i3 + 2] + (Math.random() - 0.5) * 0.01
 
-			const pulse = Math.sin(time * 2 + i * 0.1) * 0.000005
-			positions[i3] += pulse
-			positions[i3 + 1] += pulse
-
-			const distance = Math.sqrt(
-				positions[i3] ** 2 +
-				positions[i3 + 1] ** 2 +
-				positions[i3 + 2] ** 2
-			)
-
-			if (distance > 100 || distance < 10) {
-				velocitiesRef.current[i3] *= -1
-				velocitiesRef.current[i3 + 1] *= -1
-				velocitiesRef.current[i3 + 2] *= -1
+			if (posArray[i3 + 1] > 30) {
+				posArray[i3 + 1] = -30
+				posArray[i3] = (Math.random() - 0.5) * 60
+				posArray[i3 + 2] = (Math.random() - 0.5) * 30
+				velocitiesRef.current[i3] = (Math.random() - 0.5) * 0.03
+				velocitiesRef.current[i3 + 2] = (Math.random() - 0.5) * 0.03
 			}
 		}
 
 		meshRef.current.geometry.attributes.position.needsUpdate = true
 
-		meshRef.current.rotation.y = time * 0.005
-		meshRef.current.rotation.x = time * 0.005
+		meshRef.current.rotation.z = -Math.PI / 6
 	})
 
 	return (
 		<points ref={meshRef}>
 			<bufferGeometry>
-				<bufferAttribute
-					attach="attributes-position"
-					args={[positions, 3]}
-				/>
-				<bufferAttribute
-					attach="attributes-color"
-					args={[colors, 3]}
-				/>
-				<bufferAttribute
-					attach="attributes-size"
-					args={[sizes, 1]}
-				/>
+				<bufferAttribute attach="attributes-position" args={[positions, 3]} />
+				<bufferAttribute attach="attributes-color" args={[colors, 3]} />
+				<bufferAttribute attach="attributes-size" args={[sizes, 1]} />
 			</bufferGeometry>
 			<pointsMaterial
-				size={0.2}
+				size={0.3}
 				vertexColors
 				transparent
-				opacity={1.0}
+				opacity={0.8}
 				sizeAttenuation
 				blending={THREE.AdditiveBlending}
 				depthWrite={false}
