@@ -13,7 +13,7 @@ const RootLayout = () => (
 				left: 0,
 				width: '100%',
 				height: '100%',
-				backgroundImage: 'url(/input.gif)',
+				backgroundImage: 'url(/input.gif), url(/background.webp)',
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',
 				zIndex: -2,
