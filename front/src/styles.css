@@ -1,8 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import "tailwindcss";
 
+@font-face {
+	font-family: 'EnchantedLand';
+	src: url('/fonts/enchanted_land/Enchanted Land.otf') format('opentype');
+}
+
 @theme {
-	--font-press-start-2p: 'Press Start 2P';
+	--font-enchanted-land: 'EnchantedLand';
+}
+
+body {
+	font-family: 'EnchantedLand', sans-serif;
+	font-size: 18px;
 }
 
 .btn {
@@ -12,13 +21,21 @@
   display: inline-block;
   transition: all .2s;
   position: relative;
-  padding: 15px 25px;
+  padding: 12px 20px;
   position: relative;
 	border: white solid 1px;
   top: 0;
 	color: #fff;
   cursor: pointer;
-  margin:0 20px;
+  margin: 10px;
+}
+
+@media (min-width: 640px) {
+	.btn {
+		font-size: 24px;
+		padding: 15px 25px;
+		margin: 0 20px;
+	}
 }
 
 .btn:active {
