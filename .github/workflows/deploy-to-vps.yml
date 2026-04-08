@@ -6,6 +6,7 @@ on:
       - "Build And Push Server Container"
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
   deploy:
