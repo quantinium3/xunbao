@@ -1,11 +1,6 @@
 name: Build and Push Server Container
 
 on:
-  push:
-    branches:
-      - v2
-    paths:
-      - 'back/**'
   workflow_dispatch:
 
 env:

@@ -1,11 +1,6 @@
 name: Deploy to VPS
 
 on:
-  workflow_run:
-    workflows:
-      - "Build And Push Server Container"
-    types:
-      - completed
   workflow_dispatch:
 
 jobs:
