@@ -2,13 +2,13 @@ FROM oven/bun AS build
 
 WORKDIR /app
 
-COPY package.json package.json
-COPY bun.lock bun.lock
+COPY back/package.json package.json
+COPY back/bun.lock bun.lock
 
 RUN bun install
 
-COPY ./src ./src
-COPY ./drizzle ./drizzle
+COPY back/src ./src
+COPY back/drizzle ./drizzle
 
 ENV NODE_ENV=production
 
