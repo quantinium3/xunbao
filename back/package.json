@@ -10,8 +10,6 @@
     "@clerk/hono": "^0.1.9",
     "@hono/standard-validator": "^0.2.1",
     "@paralleldrive/cuid2": "^3.0.4",
-    "@react-email/components": "^1.0.2",
-    "better-auth": "^1.4.9",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "hono": "^4.11.3",
@@ -19,7 +17,6 @@
     "http-status": "^2.1.0",
     "pg": "^8.16.3",
     "react": "^19.2.3",
-    "resend": "^6.6.0",
     "svix": "^1.90.0"
   },
   "devDependencies": {
