@@ -19,7 +19,7 @@ function RouteComponent() {
 	const navigate = useNavigate()
 	const [isStarting, setIsStarting] = useState(false)
 	const [isCheckingSession, setIsCheckingSession] = useState(true)
-	const { isSignedIn } = useAuth()
+	const { isSignedIn, getToken } = useAuth()
 	const nav = useNavigate();
 	if (!isSignedIn) {
 		nav({ to: "/sign-in" })
@@ -28,7 +28,8 @@ function RouteComponent() {
 	useEffect(() => {
 		const checkRecentSession = async () => {
 			try {
-				const response = await quizApi.getRecentSession()
+				const token = await getToken()
+				const response = await quizApi.getRecentSession(token)
 				if (response.session) {
 					if (response.session.status === 'completed') {
 						navigate({
@@ -55,7 +56,8 @@ function RouteComponent() {
 	const handleStartQuiz = async () => {
 		setIsStarting(true)
 		try {
-			const response = await quizApi.startQuiz()
+			const token = await getToken()
+			const response = await quizApi.startQuiz(token)
 
 			navigate({
 				to: '/quiz/$sessionId',

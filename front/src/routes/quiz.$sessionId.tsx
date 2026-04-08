@@ -21,7 +21,7 @@ function RouteComponent() {
 	const [isShowingFeedback, setIsShowingFeedback] = useState(false);
 	const [timerStoppedAt, setTimerStoppedAt] = useState<number | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const { isSignedIn } = useAuth()
+	const { isSignedIn, getToken } = useAuth()
 	if (!isSignedIn) {
 		navigate({ to: "/sign-in" })
 	}
@@ -33,15 +33,20 @@ function RouteComponent() {
 		refetch,
 	} = useQuery({
 		queryKey: ["quiz", sessionId, "current"],
-		queryFn: () => quizApi.getCurrentQuestion(sessionId),
+		queryFn: async () => {
+			const token = await getToken();
+			return quizApi.getCurrentQuestion(token, sessionId)
+		},
 		refetchInterval: isShowingFeedback || isSubmitting ? false : 1000,
 		staleTime: 0,
 		retry: 1,
 	});
 
 	const submitAnswerMutation = useMutation({
-		mutationFn: (selectedIndex: number) =>
-			quizApi.submitAnswer(sessionId, { selected_answer_idx: selectedIndex }),
+		mutationFn: async (selectedIndex: number) => {
+			const token = await getToken();
+			return quizApi.submitAnswer(token, sessionId, { selected_answer_idx: selectedIndex })
+		},
 		onSuccess: (data) => {
 			setIsSubmitting(false);
 			setAnswerFeedback(data);

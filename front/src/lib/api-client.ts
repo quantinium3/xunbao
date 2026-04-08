@@ -1,4 +1,3 @@
-import { useAuth } from "@clerk/react";
 import axios from "axios";
 
 const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api/v1`;
@@ -10,14 +9,6 @@ const apiClient = axios.create({
 		"Content-Type": "application/json",
 	},
 });
-apiClient.interceptors.request.use(async (config) => {
-	const { getToken } = useAuth()
-	const token = await getToken();
-	if (token) {
-		config.headers.Authorization = `Bearer ${token}`
-	}
-	return config
-})
 
 export interface StartQuizResponse {
 	session_id: string;
@@ -119,45 +110,77 @@ export interface LeaderboardResponse {
 }
 
 export const quizApi = {
-	startQuiz: async (): Promise<StartQuizResponse> => {
-		const response = await apiClient.post<StartQuizResponse>("/quiz/start");
+	startQuiz: async (token: string | null): Promise<StartQuizResponse> => {
+		const response = await apiClient.post<StartQuizResponse>(
+			"/quiz/start",
+			{},
+			{
+				headers: token ? { Authorization: `Bearer ${token}` } : {},
+			}
+		);
 		return response.data;
 	},
 
 	getCurrentQuestion: async (
+		token: string | null,
 		sessionId: string
 	): Promise<CurrentQuizResponse> => {
 		const response = await apiClient.get<CurrentQuizResponse>(
-			`/quiz/${sessionId}/current`
+			`/quiz/${sessionId}/current`,
+			{
+				headers: token ? { Authorization: `Bearer ${token}` } : {},
+			}
 		);
 		return response.data;
 	},
 
 	submitAnswer: async (
+		token: string | null,
 		sessionId: string,
 		request: SubmitAnswerRequest
 	): Promise<SubmitAnswerResponse> => {
 		const response = await apiClient.post<SubmitAnswerResponse>(
 			`/quiz/${sessionId}/answer`,
-			request
+			request,
+			{
+				headers: token ? { Authorization: `Bearer ${token}` } : {},
+			}
 		);
 		return response.data;
 	},
 
-	getResults: async (sessionId: string): Promise<QuizResultsResponse> => {
+	getResults: async (
+		token: string | null,
+		sessionId: string
+	): Promise<QuizResultsResponse> => {
 		const response = await apiClient.get<QuizResultsResponse>(
-			`/quiz/${sessionId}/results`
+			`/quiz/${sessionId}/results`,
+			{
+				headers: token ? { Authorization: `Bearer ${token}` } : {},
+			}
 		);
 		return response.data;
 	},
 
-	getRecentSession: async (): Promise<RecentSessionResponse> => {
-		const response = await apiClient.get<RecentSessionResponse>("/quiz/recent");
+	getRecentSession: async (
+		token: string | null
+	): Promise<RecentSessionResponse> => {
+		const response = await apiClient.get<RecentSessionResponse>(
+			"/quiz/recent",
+			{
+				headers: token ? { Authorization: `Bearer ${token}` } : {},
+			}
+		);
 		return response.data;
 	},
 
-	getLeaderboard: async (): Promise<LeaderboardResponse> => {
-		const response = await apiClient.get<LeaderboardResponse>("/quiz/leaderboard");
+	getLeaderboard: async (token: string | null): Promise<LeaderboardResponse> => {
+		const response = await apiClient.get<LeaderboardResponse>(
+			"/quiz/leaderboard",
+			{
+				headers: token ? { Authorization: `Bearer ${token}` } : {},
+			}
+		);
 		return response.data;
 	},
 };

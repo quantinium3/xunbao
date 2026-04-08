@@ -11,7 +11,7 @@ export const Route = createFileRoute("/results/$sessionId")({
 function RouteComponent() {
 	const { sessionId } = Route.useParams();
 	const navigate = useNavigate();
-	const { isSignedIn } = useAuth()
+	const { isSignedIn, getToken } = useAuth()
 	if (!isSignedIn) {
 		navigate({ to: "/sign-in" })
 	}
@@ -22,7 +22,10 @@ function RouteComponent() {
 		error,
 	} = useQuery({
 		queryKey: ["quiz", sessionId, "results"],
-		queryFn: () => quizApi.getResults(sessionId),
+		queryFn: async () => {
+			const token = await getToken();
+			return quizApi.getResults(token, sessionId)
+		},
 		retry: 1,
 	});
 

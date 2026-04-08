@@ -9,21 +9,24 @@ export const Route = createFileRoute("/leaderboard")({
 });
 
 function RouteComponent() {
+	const navigate = useNavigate();
+	const { isSignedIn, getToken } = useAuth();
+	if (isSignedIn) {
+		navigate({ to: "/sign-in" })
+	}
 	const {
 		data: leaderboard,
 		isLoading,
 		error,
 	} = useQuery({
 		queryKey: ["leaderboard"],
-		queryFn: () => quizApi.getLeaderboard(),
+		queryFn: async () => {
+			const token = await getToken();
+			return quizApi.getLeaderboard(token)
+		},
 		refetchInterval: 5000,
 		staleTime: 0,
 	});
-	const navigate = useNavigate();
-	const auth = useAuth();
-	if (!auth.isSignedIn) {
-		navigate({ to: "/sign-in" })
-	}
 
 	if (isLoading) {
 		return (
