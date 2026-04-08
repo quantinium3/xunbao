@@ -60,7 +60,6 @@ function SignIn() {
 				})
 			} else {
 				console.error('Sign-in attempt not complete:', signIn)
-				toast.error("failed to sign in user")
 			}
 		} catch (err) {
 			console.error("failed to sign in user", err)
@@ -99,17 +98,26 @@ function SignIn() {
 		return (
 			<div className="font-sans text-white flex justify-center items-center mx-auto min-h-screen">
 				<div className="border backdrop-blur-xl p-3 rounded-md">
-					<h1>Verify your Email</h1>
-					<form action={handleVerification}>
+					<h1 className="font-bold font-enchanted-land text-center text-4xl underline underline-offset-4 my-3">Sign In</h1>
+					<form action={handleVerification} className='flex flex-col'>
 						<label htmlFor="code">Enter your verification code</label>
-						<input id="code" name="code" type="text" />
+						<input id="code" name="code" type="text"
+							className='border rounded-md px-2'
+						/>
+
 						{clerkErrors.fields.code && <p>{clerkErrors.fields.code.message}</p>}
-						<button type="submit" disabled={fetchStatus === 'fetching'}>
+						<button type="submit" disabled={fetchStatus === 'fetching'}
+							className="border px-3 rounded-md items-center hover:bg-white/10 disabled:opacity-50"
+						>
 							Verify
 						</button>
 					</form>
-					<button onClick={() => signIn.emailCode.sendCode()}>I need a new code</button>
-					<button onClick={() => signIn.reset()}>Start over</button>
+					<button
+						className="border px-3 rounded-md items-center hover:bg-white/10 disabled:opacity-50"
+						onClick={() => signIn.emailCode.sendCode()}>I need a new code</button>
+					<button
+						className="border px-3 rounded-md items-center hover:bg-white/10 disabled:opacity-50"
+						onClick={() => signIn.reset()}>Start over</button>
 				</div>
 			</div>
 		)
@@ -118,7 +126,7 @@ function SignIn() {
 	return (
 		<div className="font-sans text-white flex justify-center items-center mx-auto min-h-screen">
 			<div className="border backdrop-blur-xl p-3 rounded-md">
-				<h1 className="font-bold font-enchanted-land text-center text-4xl underline underline-offset-4 my-3">Sign Up</h1>
+				<h1 className="font-bold font-enchanted-land text-center text-4xl underline underline-offset-4 my-3">Sign In</h1>
 				<form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
 					<div className='flex flex-col mx-auto'>
 						<label htmlFor="emailAddress" className='font-bold'>Email: </label>
