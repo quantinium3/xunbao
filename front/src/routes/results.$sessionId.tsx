@@ -1,22 +1,20 @@
-import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { authClient } from "../lib/auth-client";
 import { quizApi } from "../lib/api-client";
 import Navbar from "../components/navbar";
+import { useAuth } from "@clerk/react";
 
 export const Route = createFileRoute("/results/$sessionId")({
-	beforeLoad: async () => {
-		const session = await authClient.getSession();
-		if (!session.data?.user) {
-			throw redirect({ to: "/sign-in" });
-		}
-	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
 	const { sessionId } = Route.useParams();
 	const navigate = useNavigate();
+	const { isSignedIn } = useAuth()
+	if (!isSignedIn) {
+		navigate({ to: "/sign-in" })
+	}
 
 	const {
 		data: results,

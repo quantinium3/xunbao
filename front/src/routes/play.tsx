@@ -1,10 +1,10 @@
-import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
-import { authClient } from '../lib/auth-client'
 import { quizApi } from '../lib/api-client'
 import toast from 'react-hot-toast'
 import Navbar from '../components/navbar'
 import { AxiosError } from 'axios'
+import { useAuth } from '@clerk/react'
 
 interface QuizConflictResponse {
 	status: 'in_progress' | 'completed';
@@ -12,17 +12,6 @@ interface QuizConflictResponse {
 }
 
 export const Route = createFileRoute('/play')({
-	beforeLoad: async () => {
-		const session = await authClient.getSession();
-		if (!session.data?.user) {
-			throw redirect({ to: '/sign-in' });
-		}
-
-		const user = session.data.user
-		if (!user.is_onboarding_complete) {
-			throw redirect({ to: '/onboarding' });
-		}
-	},
 	component: RouteComponent,
 })
 
@@ -30,6 +19,11 @@ function RouteComponent() {
 	const navigate = useNavigate()
 	const [isStarting, setIsStarting] = useState(false)
 	const [isCheckingSession, setIsCheckingSession] = useState(true)
+	const { isSignedIn } = useAuth()
+	const nav = useNavigate();
+	if (!isSignedIn) {
+		nav({ to: "/sign-in" })
+	}
 
 	useEffect(() => {
 		const checkRecentSession = async () => {

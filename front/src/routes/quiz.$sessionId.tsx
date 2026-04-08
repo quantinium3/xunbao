@@ -1,6 +1,5 @@
-import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { authClient } from "../lib/auth-client";
 import { quizApi, type SubmitAnswerResponse } from "../lib/api-client";
 import { QuizProgress } from "../components/quiz-progress";
 import Navbar from "../components/navbar";
@@ -9,14 +8,9 @@ import { Timer } from "../components/timer";
 import { QuestionDisplay } from "../components/question-display";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useAuth } from "@clerk/react";
 
 export const Route = createFileRoute("/quiz/$sessionId")({
-	beforeLoad: async () => {
-		const session = await authClient.getSession();
-		if (!session.data?.user) {
-			throw redirect({ to: "/sign-in" });
-		}
-	},
 	component: RouteComponent,
 });
 
@@ -27,6 +21,10 @@ function RouteComponent() {
 	const [isShowingFeedback, setIsShowingFeedback] = useState(false);
 	const [timerStoppedAt, setTimerStoppedAt] = useState<number | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { isSignedIn } = useAuth()
+	if (!isSignedIn) {
+		navigate({ to: "/sign-in" })
+	}
 
 	const {
 		data: quizState,
