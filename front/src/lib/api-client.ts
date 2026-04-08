@@ -1,3 +1,4 @@
+import { useAuth } from "@clerk/react";
 import axios from "axios";
 
 const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api/v1`;
@@ -9,6 +10,14 @@ const apiClient = axios.create({
 		"Content-Type": "application/json",
 	},
 });
+apiClient.interceptors.request.use(async (config) => {
+	const { getToken } = useAuth()
+	const token = await getToken();
+	if (token) {
+		config.headers.Authorization = `Bearer ${token}`
+	}
+	return config
+})
 
 export interface StartQuizResponse {
 	session_id: string;
