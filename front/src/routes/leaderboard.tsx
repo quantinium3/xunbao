@@ -1,7 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { quizApi } from "../lib/api-client";
 import Navbar from "../components/navbar";
+import { useAuth } from "@clerk/react";
 
 export const Route = createFileRoute("/leaderboard")({
 	component: RouteComponent,
@@ -18,6 +19,11 @@ function RouteComponent() {
 		refetchInterval: 5000,
 		staleTime: 0,
 	});
+	const navigate = useNavigate();
+	const auth = useAuth();
+	if (!auth.isSignedIn) {
+		navigate({ to: "/sign-in" })
+	}
 
 	if (isLoading) {
 		return (
