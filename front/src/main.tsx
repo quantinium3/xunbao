@@ -2,6 +2,8 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ClerkProvider } from '@clerk/react'
+
 
 import { routeTree } from './routeTree.gen'
 import './styles.css'
@@ -28,9 +30,11 @@ if (!rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement)
 	root.render(
 		<StrictMode>
-			<QueryClientProvider client={queryClient}>
-				<RouterProvider router={router} />
-			</QueryClientProvider>
+			<ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
+				<QueryClientProvider client={queryClient}>
+					<RouterProvider router={router} />
+				</QueryClientProvider>
+			</ClerkProvider>
 		</StrictMode>,
 	)
 }
