@@ -35,6 +35,7 @@ jobs:
           script: |
             cd ~/app
             echo "${{ secrets.ENV_FILE }}" > .env
+            source .env
             docker compose up -d --pull always --remove-orphans
             docker image prune -f
 
