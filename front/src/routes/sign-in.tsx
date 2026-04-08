@@ -98,9 +98,9 @@ function SignIn() {
 		return (
 			<div className="font-sans text-white flex justify-center items-center mx-auto min-h-screen">
 				<div className="border backdrop-blur-xl p-3 rounded-md">
-					<h1 className="font-bold font-enchanted-land text-center text-4xl underline underline-offset-4 my-3">Sign In</h1>
-					<form action={handleVerification} className='flex flex-col'>
-						<label htmlFor="code">Enter your verification code</label>
+					<h1 className="font-bold font-enchanted-land text-center text-4xl underline underline-offset-4 my-3">Verify</h1>
+					<form action={handleVerification} className='flex flex-col space-y-3'>
+						<label htmlFor="code" className='font-bold'>Enter your verification code</label>
 						<input id="code" name="code" type="text"
 							className='border rounded-md px-2'
 						/>
@@ -112,12 +112,14 @@ function SignIn() {
 							Verify
 						</button>
 					</form>
-					<button
-						className="border px-3 rounded-md items-center hover:bg-white/10 disabled:opacity-50"
-						onClick={() => signIn.emailCode.sendCode()}>I need a new code</button>
-					<button
-						className="border px-3 rounded-md items-center hover:bg-white/10 disabled:opacity-50"
-						onClick={() => signIn.reset()}>Start over</button>
+					<div className='flex flex-col space-y-2 my-2'>
+						<button
+							className="border px-3 rounded-md items-center hover:bg-white/10 disabled:opacity-50"
+							onClick={() => signIn.emailCode.sendCode()}>I need a new code</button>
+						<button
+							className="border px-3 rounded-md items-center hover:bg-white/10 disabled:opacity-50"
+							onClick={() => signIn.reset()}>Start over</button>
+					</div>
 				</div>
 			</div>
 		)
