@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { auth } from "../lib/auth";
 import { db } from "../lib/db";
 import { question, quiz_session, quiz_answer, leaderboard } from "../lib/db/schema/quiz-schema";
 import { user } from "../lib/db/schema/auth-schema";
@@ -7,6 +6,7 @@ import { eq, and, desc, asc, sql } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import status from "http-status";
 import { z } from "zod";
+import { getAuth } from "@clerk/hono";
 
 export const quizRouter = new Hono();
 const MAX_QUESTIONS = 15;
@@ -68,16 +68,14 @@ interface RecentSessionResponse {
 
 // GET /api/v1/quiz/recent - Get user's most recent quiz session
 quizRouter.get("/recent", async (c) => {
-	const session = await auth.api.getSession({
-		headers: c.req.raw.headers,
-	});
-
-	if (!session) {
+	const auth = getAuth(c);
+	if (!auth?.isAuthenticated) {
 		return c.json({
 			error: "Unauthorized",
-			success: false,
-		}, 401);
+			success: false
+		}, 401)
 	}
+
 
 	try {
 		const recentSessionResult = await db
@@ -86,7 +84,7 @@ quizRouter.get("/recent", async (c) => {
 				status: quiz_session.status,
 			})
 			.from(quiz_session)
-			.where(eq(quiz_session.userId, session.user.id))
+			.where(eq(quiz_session.userId, auth.userId))
 			.orderBy(desc(quiz_session.createdAt))
 			.limit(1);
 
@@ -112,22 +110,19 @@ quizRouter.get("/recent", async (c) => {
 
 // POST /api/v1/quiz/start - Start a new quiz session with 15 random questions
 quizRouter.post("/start", async (c) => {
-	const session = await auth.api.getSession({
-		headers: c.req.raw.headers,
-	});
-
-	if (!session) {
+	const auth = getAuth(c)
+	if (!auth.isAuthenticated) {
 		return c.json({
 			error: "Unauthorized",
-			success: false,
-		}, 401);
+			success: false
+		}, 401)
 	}
 
 	try {
 		const existingSessionResult = await db
 			.select()
 			.from(quiz_session)
-			.where(eq(quiz_session.userId, session.user.id))
+			.where(eq(quiz_session.userId, auth.userId))
 			.orderBy(desc(quiz_session.createdAt))
 			.limit(1);
 		if (existingSessionResult.length > 0) {
@@ -174,7 +169,7 @@ quizRouter.post("/start", async (c) => {
 
 		await db.insert(quiz_session).values({
 			id: sessionId,
-			userId: session.user.id,
+			userId: auth.userId,
 			questionIds: questionIds,
 			currentQuestionIndex: 0,
 			currentQuestionStartedAt: null,
@@ -210,14 +205,12 @@ quizRouter.post("/start", async (c) => {
 // GET /api/v1/quiz/:session_id/current - Get current question and session state
 quizRouter.get("/:session_id/current", async (c) => {
 	try {
-		const session = await auth.api.getSession({
-			headers: c.req.raw.headers,
-		})
-		if (!session) {
+		const auth = getAuth(c)
+		if (!auth.isAuthenticated) {
 			return c.json({
 				error: "Unauthorized",
-				success: false,
-			}, status.UNAUTHORIZED);
+				success: false
+			}, 401)
 		}
 
 		const quizSessionResult = await db
@@ -225,7 +218,7 @@ quizRouter.get("/:session_id/current", async (c) => {
 			.from(quiz_session).where(
 				and(
 					eq(quiz_session.id, c.req.param("session_id")),
-					eq(quiz_session.userId, session.user.id)
+					eq(quiz_session.userId, auth.userId)
 				)
 			)
 			.limit(1);
@@ -343,14 +336,12 @@ interface AnswerQuizResponse {
 // POST /api/v1/quiz/:session_id/answer - Answer a question
 quizRouter.post("/:session_id/answer", async (c) => {
 	try {
-		const session = await auth.api.getSession({
-			headers: c.req.raw.headers
-		})
-		if (!session) {
+		const auth = getAuth(c)
+		if (!auth.isAuthenticated) {
 			return c.json({
 				error: "Unauthorized",
-				success: false,
-			}, status.UNAUTHORIZED);
+				success: false
+			}, 401)
 		}
 
 		const quizSessionResult = await db
@@ -358,7 +349,7 @@ quizRouter.post("/:session_id/answer", async (c) => {
 			.from(quiz_session).where(
 				and(
 					eq(quiz_session.id, c.req.param("session_id")),
-					eq(quiz_session.userId, session.user.id)
+					eq(quiz_session.userId, auth.userId)
 				)
 			)
 			.limit(1);
@@ -475,7 +466,7 @@ quizRouter.post("/:session_id/answer", async (c) => {
 				const existingEntryResult = await tx
 					.select()
 					.from(leaderboard)
-					.where(eq(leaderboard.userId, session.user.id))
+					.where(eq(leaderboard.userId, auth.userId))
 					.limit(1);
 
 				if (existingEntryResult.length > 0) {
@@ -493,12 +484,12 @@ quizRouter.post("/:session_id/answer", async (c) => {
 								bestTimeMs: totalTimeMs,
 								updatedAt: new Date(),
 							})
-							.where(eq(leaderboard.userId, session.user.id));
+							.where(eq(leaderboard.userId, auth.userId));
 					}
 				} else {
 					await tx.insert(leaderboard).values({
 						id: createId(),
-						userId: session.user.id,
+						userId: auth.userId,
 						topScore: finalScore,
 						bestTimeMs: totalTimeMs,
 						updatedAt: new Date(),
@@ -555,14 +546,12 @@ interface QuizResultsResponse {
 // GET /api/v1/quiz/:session_id/results - Get quiz results
 quizRouter.get("/:session_id/results", async (c) => {
 	try {
-		const session = await auth.api.getSession({
-			headers: c.req.raw.headers,
-		});
-		if (!session) {
+		const auth = getAuth(c)
+		if (!auth.isAuthenticated) {
 			return c.json({
 				error: "Unauthorized",
-				success: false,
-			}, status.UNAUTHORIZED);
+				success: false
+			}, 401)
 		}
 
 		const quizSessionResult = await db
@@ -571,7 +560,7 @@ quizRouter.get("/:session_id/results", async (c) => {
 			.where(
 				and(
 					eq(quiz_session.id, c.req.param("session_id")),
-					eq(quiz_session.userId, session.user.id)
+					eq(quiz_session.userId, auth.userId)
 				)
 			)
 			.limit(1);
@@ -686,9 +675,13 @@ interface LeaderboardResponse {
 // GET /api/v1/leaderboard - Get leaderboard with top 10 and user's rank
 quizRouter.get("/leaderboard", async (c) => {
 	try {
-		const session = await auth.api.getSession({
-			headers: c.req.raw.headers,
-		});
+		const auth = getAuth(c)
+		if (!auth.isAuthenticated) {
+			return c.json({
+				error: "Unauthorized",
+				success: false
+			}, 401)
+		}
 
 		const topEntries = await db
 			.select({
@@ -711,16 +704,15 @@ quizRouter.get("/leaderboard", async (c) => {
 		}));
 
 		let userRank: LeaderboardResponse["user_rank"] = null;
-		if (session) {
-			const userEntryResult = await db
-				.select()
-				.from(leaderboard)
-				.where(eq(leaderboard.userId, session.user.id))
-				.limit(1);
+		const userEntryResult = await db
+			.select()
+			.from(leaderboard)
+			.where(eq(leaderboard.userId, auth.userId))
+			.limit(1);
 
-			if (userEntryResult.length > 0) {
-				const userEntry = userEntryResult[0];
-				const rankResult = await db.execute<{ rank: string }>(sql`
+		if (userEntryResult.length > 0) {
+			const userEntry = userEntryResult[0];
+			const rankResult = await db.execute<{ rank: string }>(sql`
 					SELECT COUNT(*) + 1 as rank
 					FROM ${leaderboard}
 					WHERE ${leaderboard.topScore} > ${userEntry.topScore}
@@ -728,14 +720,13 @@ quizRouter.get("/leaderboard", async (c) => {
 					       AND ${leaderboard.bestTimeMs} < ${userEntry.bestTimeMs})
 				`);
 
-				const rank = parseInt(rankResult.rows[0]?.rank || "0");
+			const rank = parseInt(rankResult.rows[0]?.rank || "0");
 
-				userRank = {
-					rank: rank,
-					score: userEntry.topScore,
-					time_ms: userEntry.bestTimeMs,
-				};
-			}
+			userRank = {
+				rank: rank,
+				score: userEntry.topScore,
+				time_ms: userEntry.bestTimeMs,
+			};
 		}
 
 		const totalResult = await db.execute<{ count: string }>(
