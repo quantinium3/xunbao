@@ -2,11 +2,13 @@ import 'dotenv/config';
 import { Hono } from 'hono'
 import { cors } from "hono/cors";
 import { quizRouter } from "./routes/quiz";
-import { runMigrations } from "./lib/db/migrate";
 import { clerkMiddleware } from '@clerk/hono';
 import webhookRouter from './routes/webhook';
 
-const corsOrigins = process.env.CORS_ORIGIN?.split(',').map(o => o.trim()) ?? ['http://localhost:5173'];
+const corsOrigins = process.env.CORS_ORIGIN?.split(',').map(o => o.trim());
+if (!corsOrigins) {
+	throw new Error("CORS_ORIGIN environment var not set")
+}
 
 const app = new Hono()
 
