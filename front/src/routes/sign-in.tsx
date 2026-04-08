@@ -97,19 +97,21 @@ function SignIn() {
 
 	if (signIn.status === 'needs_first_factor') {
 		return (
-			<>
-				<h1>Verify your phone number</h1>
-				<form action={handleVerification}>
-					<label htmlFor="code">Enter your verification code</label>
-					<input id="code" name="code" type="text" />
-					{clerkErrors.fields.code && <p>{clerkErrors.fields.code.message}</p>}
-					<button type="submit" disabled={fetchStatus === 'fetching'}>
-						Verify
-					</button>
-				</form>
-				<button onClick={() => signIn.emailCode.sendCode()}>I need a new code</button>
-				<button onClick={() => signIn.reset()}>Start over</button>
-			</>
+			<div className="font-sans text-white flex justify-center items-center mx-auto min-h-screen">
+				<div className="border backdrop-blur-xl p-3 rounded-md">
+					<h1>Verify your Email</h1>
+					<form action={handleVerification}>
+						<label htmlFor="code">Enter your verification code</label>
+						<input id="code" name="code" type="text" />
+						{clerkErrors.fields.code && <p>{clerkErrors.fields.code.message}</p>}
+						<button type="submit" disabled={fetchStatus === 'fetching'}>
+							Verify
+						</button>
+					</form>
+					<button onClick={() => signIn.emailCode.sendCode()}>I need a new code</button>
+					<button onClick={() => signIn.reset()}>Start over</button>
+				</div>
+			</div>
 		)
 	}
 
