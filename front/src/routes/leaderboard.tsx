@@ -11,7 +11,7 @@ export const Route = createFileRoute("/leaderboard")({
 function RouteComponent() {
 	const navigate = useNavigate();
 	const { isSignedIn, getToken } = useAuth();
-	if (isSignedIn) {
+	if (!isSignedIn) {
 		navigate({ to: "/sign-in" })
 	}
 	const {
