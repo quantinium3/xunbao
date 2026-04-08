@@ -6,6 +6,7 @@ on:
       - "Build And Push Server Container"
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -35,7 +36,6 @@ jobs:
           script: |
             cd ~/app
             echo "${{ secrets.ENV_FILE }}" > .env
-            source .env
             docker compose up -d --pull always --remove-orphans
             docker image prune -f
 
