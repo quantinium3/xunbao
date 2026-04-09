@@ -17,9 +17,9 @@ const SCORING_CONFIG = {
 		hard: 30,
 	},
 	TIME_BONUSES: [
-		{ threshold: 5, points: 10 },
-		{ threshold: 10, points: 5 },
-		{ threshold: 15, points: 2 }
+		{ threshold: 7, points: 20 },
+		{ threshold: 10, points: 10 },
+		{ threshold: 15, points: 0 }
 	],
 	STREAK_BONUSES: [
 		{ threshold: 5, points: 10 },
