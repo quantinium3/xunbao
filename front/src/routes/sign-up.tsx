@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router'
 import { useState } from "react"
 import { z } from "zod";
 import { useAuth, useSignUp } from '@clerk/react'
@@ -6,8 +6,13 @@ import { useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 
-
 export const Route = createFileRoute('/sign-up')({
+  beforeLoad: () => {
+    throw redirect({
+      to: "/",
+      replace: true
+    })
+  },
   component: RouteComponent,
 })
 

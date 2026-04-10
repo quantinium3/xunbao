@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { quizApi, type SubmitAnswerResponse } from "../lib/api-client";
 import { QuizProgress } from "../components/quiz-progress";
@@ -11,6 +11,12 @@ import toast from "react-hot-toast";
 import { useAuth } from "@clerk/react";
 
 export const Route = createFileRoute("/quiz/$sessionId")({
+	beforeLoad: () => {
+		throw redirect({
+			to: "/",
+			replace: true,
+		})
+	},
 	component: RouteComponent,
 });
 

@@ -1,10 +1,16 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { quizApi } from "../lib/api-client";
 import Navbar from "../components/navbar";
 import { useAuth } from "@clerk/react";
 
 export const Route = createFileRoute("/results/$sessionId")({
+	beforeLoad: () => {
+		throw redirect({
+			to: "/",
+			replace: true,
+		})
+	},
 	component: RouteComponent,
 });
 
