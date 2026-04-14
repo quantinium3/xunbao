@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 import { quizApi } from '../lib/api-client'
 import toast from 'react-hot-toast'
@@ -12,12 +12,6 @@ interface QuizConflictResponse {
 }
 
 export const Route = createFileRoute('/play')({
-	beforeLoad: () => {
-		throw redirect({
-			to: "/",
-			replace: true,
-		})
-	},
 	component: RouteComponent,
 })
 
